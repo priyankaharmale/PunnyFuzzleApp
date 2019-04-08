@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pop_up_bg">
+
+    <ImageView
+        android:layout_width="@dimen/dimens_40dp"
+        android:layout_height="@dimen/dimens_30dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/dimens_30dp"
+        android:src="@drawable/error"
+        android:text="No Friends Available"
+
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_20"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:layout_marginLeft="@dimen/dimens_20dp"
+        android:layout_marginRight="@dimen/dimens_20dp"
+        android:layout_marginTop="@dimen/dimens_40dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimens_50dp"
+            android:layout_margin="@dimen/dimens_10dp"
+            android:gravity="center"
+            android:src="@drawable/header_text" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimens_10dp"
+            android:gravity="center"
+            android:text="Will You Accept the Challenge?"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18sp"
+
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dimens_50dp
+"></android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/textView_empty_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimens_10dp"
+            android:gravity="center"
+            android:text="No Friends Available"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_20"
+            android:textStyle="bold"
+            android:visibility="gone" />
+    </LinearLayout>
+
+
+</RelativeLayout>

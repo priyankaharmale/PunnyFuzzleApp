@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "695952438147",
+    "firebase_url": "https://punnyfuzzleapp-2be58.firebaseio.com",
+    "project_id": "punnyfuzzleapp-2be58",
+    "storage_bucket": "punnyfuzzleapp-2be58.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:695952438147:android:b6e3c48568a6cb95",
+        "android_client_info": {
+          "package_name": "com.hnweb.punny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "695952438147-hf5kdissre2foa7ca69nc9qcd04bh1ij.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hnweb.punny",
+            "certificate_hash": "2ec5b6e3e0368343c94a1589930f6284d4f33df6"
+          }
+        },
+        {
+          "client_id": "695952438147-24p3oub8fqq3vf2v0iuu2o0pi2boch0u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4cWDEb2N0ZPIsgpQIp3RF9bVY8DS6cmA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "695952438147-24p3oub8fqq3vf2v0iuu2o0pi2boch0u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:foregroundGravity="top|center" >
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header"
+        android:paddingRight="10dp"
+        android:title="@string/some_text_to_display">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/btn_back"
+            android:onClick="btnBack_onClick"
+            android:text="@string/none_to_display"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/header_text" />
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Under Development"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/horizontal_line"
+        android:layout_below="@+id/toolbar"
+        android:layout_gravity="center"
+        android:layout_toEndOf="@+id/textView"
+        android:gravity="center"
+        android:paddingBottom="40dp"
+        android:paddingTop="40dp">
+
+        <EditText
+            android:id="@+id/txt_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/textbox"
+            android:hint="@string/login_enter_username"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textSize="15sp" />
+
+        <ImageButton
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txt_username"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_login"
+            android:onClick="btnLogin_onClick"
+            android:text="@string/none_to_display" />
+
+        <TextView
+            android:id="@+id/lblstep1text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/btn_register"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:gravity="center"
+            android:text="@string/login_first_time"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/btn_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_register"
+            android:onClick="btnRegister_onClick"
+            android:text="@string/none_to_display" />
+
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@+id/layout_bottom"
+        android:background="@color/lightgray" />
+
+    <RelativeLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="@color/footer"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_facebook"
+            android:layout_centerHorizontal="true"
+            android:text="@string/copyright"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/img_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:layout_toLeftOf="@+id/img_twitter"
+            android:src="@drawable/facebook"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_twitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:layout_toLeftOf="@+id/img_googleplus"
+            android:src="@drawable/twitter"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_googleplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:src="@drawable/googleplus"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

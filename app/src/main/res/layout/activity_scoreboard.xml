@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header"
+        android:paddingRight="10dp"
+        android:title="@string/some_text_to_display">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_back"
+            android:onClick="btnBack_onClick"
+            android:text="@string/none_to_display"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/header_text" />
+
+        <ImageButton
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_logout"
+            android:onClick="btnLogin_onClick"
+            android:text="@string/none_to_display"
+            android:visibility="gone" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/trophy_ranking_scoreboard"
+        android:src="@drawable/trophy_ranking_scoreboard" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:background="@drawable/scorebord_bg_user"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="User Name"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative_layout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/profile_image_edit"
+                android:layout_width="@dimen/dimens_80dp"
+                android:layout_height="@dimen/dimens_100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dimens_20dp"
+                android:src="@drawable/score_ranking_trophy" />
+
+            <LinearLayout
+                android:id="@+id/profile_image_edit_upload"
+                android:layout_width="@dimen/dimens_50dp"
+                android:layout_height="@dimen/dimens_40dp"
+                android:layout_alignBottom="@+id/profile_image_edit"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dimens_40dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/score_ranking_star"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dimens_10dp"
+                    android:gravity="center"
+                    android:src="@android:drawable/ic_menu_camera"
+                    android:text="5"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimens_10dp"
+            android:background="@drawable/score_ranking_bg"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dimens_10dp"
+                android:gravity="center"
+                android:text="Score"
+                android:textColor="#FFFF00" />
+
+            <TextView
+                android:id="@+id/lblscore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dimens_10dp"
+                android:gravity="center"
+                android:text="1000"
+                android:textColor="#FFFF00"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimens_10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="/"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="5"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_18sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="@dimen/dimens_10dp"
+            android:background="#73D8FB"></View>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Solved Puzzles"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14sp" />
+
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:layout_gravity="center"
+        android:background="@drawable/play_again_button"
+        android:text="Do you want to play again?"
+        android:textSize="14sp" />
+    <Button
+        android:id="@+id/btn_scoreboard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/score_ranking_button"
+        android:text="Scoreboard Ranking"
+        android:textAllCaps="false"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</LinearLayout>

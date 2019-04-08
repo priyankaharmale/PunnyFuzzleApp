@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">PunnyFuzzleApp</string>
+
+    <string name="none_to_display"></string>
+    <string name="some_text_to_display">some text to display</string>
+    <string name="copyright">© 2019 PunnyFuzzles</string>
+
+    <string name="getmorepuzzle_title">Please select one of the options</string>
+
+    <string name="info_lbl_11">"To form a Spoonerism, you are given two words; Exchange the leading letters, up to the 1st vowel, from both words."</string>
+    <string name="info_lbl_12">"Warning:"</string>
+    <string name="info_lbl_13">"At times, you will be exchanging more than 1 letter  from one, or both words, to form a Spoonerism."</string>
+    <string name="info_ex1">"Example 1)"</string>
+    <string name="info_ex1_text">"Given:  Stick &amp; Lamp. =>"</string>
+    <string name="info_ex1_answer">"Answer: Lick Stamp"</string>
+    <string name="info_ex2">"Example 2)"</string>
+    <string name="info_ex2_text">"Given: Tape &amp; Scrub.  =>"</string>
+    <string name="info_ex2_answer">"Answer: Scrape Tub"</string>
+    <string name="info_lbl_2">\"Spoonerisms have been historically traced to Rev. William Archibald Spooner, born in London, 1844.  Himself a lecturer, his mouth at times failed to keep up with his keen intellect.  The resulting unintentional tongue-twisting of sounds and words became known as Spoonerisms.\"</string>
+    <string name="info_lbl_3">"Martin Chilton 8/2015"</string>
+    <string name="info_lbl_4">"PunnyFuzzles is brought to life by the staff at 299 Web Marketing and Fain Brood.  Fain is a 2nd Generation Math-Puzzle Master, 6th Degree.  Fain's Great Uncle was Maurice Kraitchick, author of Mathematical Recreations."</string>
+    <string name="info_lbl_5">"For more info visit"</string>
+
+    <string name="login_enter_username">Enter Username</string>
+    <string name="login_first_time">First time user please register here</string>
+
+    <string name="register_enter_username">Enter Username</string>
+    <string name="register_enter_email">Enter Email Address</string>
+
+    <string name="score_title">You have reached a score of</string>
+    <string name="score_making_rating">Making Your Rating</string>
+    <string name="score_lbl_3">To submit your own family-friendly puzzles download the template from</string>
+    <string name="score_lbl_5">Proceeds from any donated puzzles will be used towards the purchase of a food truck to provide hearty meals to homeless encampments in down town San Diego.</string>
+    <string name="score_lbl_6">If you are unable to use a hand-held device to enjoy our puzzles, or want to purchase a hard copy of the game for family road trips, visit our website to get information on the release of PunnyFuzzles, the Board Game, thank you for playing.</string>
+    <string name="score_lbl_7">PunnyFuzzles Soundtrack, Fly, written and performed by James Howard of San Diego, CA</string>
+
+    <string name="singleplayer_cant_connect">"Can't connect"</string>
+    <string name="singleplayer_check_conn">"Check your network and try again."</string>
+    <string name="singleplayer_score">Score:</string>
+    <string name="singleplayer_sound">Sound&#160;&#160;&#160;&#160;</string>
+
+    <string name="dialog_answer_chooser">Options</string>
+
+    <string name="therules_title">Instructions</string>
+    <string name="therules_given">Given:</string>
+    <string name="therules_primary_word">Primary Word</string>
+    <string name="therules_3_options">3 Options</string>
+    <string name="therules_fig">Fig</string>
+    <string name="therules_options">"a) Dish\n\nb) Rare\n\nc) Boot"</string>
+    <string name="therules_step1">Step 1</string>
+    <string name="therules_step1_text">Use the Primary word with each option to form 3 spoonerism.</string>
+    <string name="therules_step1_result">Step 1:Results</string>
+    <string name="therules_primaryword1">"a)Fig"</string>
+    <string name="therules_option1">Dish</string>
+    <string name="therules_solution11">"a)Dig"</string>
+    <string name="therules_solution12">Fish</string>
+    <string name="therules_option2">Rare</string>
+    <string name="therules_solution21">"a)Rig"</string>
+    <string name="therules_solution22">Fare</string>
+    <string name="therules_option3">Boot</string>
+    <string name="therules_solution31">"a)Big"</string>
+    <string name="therules_solution32">Foot</string>
+    <string name="therules_step2">Step 2</string>
+    <string name="therules_step2_text">Two Parts</string>
+    <string name="therules_step2_text1">"A) Select the spoonerism that matches the image."</string>
+    <string name="therules_step2_text2">"B) Click 'Answer' and the letter of the matching spoonerism to submit answer."</string>
+    <string name="therules_answer">Answer : C</string>
+    <string name="therules_step3">Step 3</string>
+    <string name="therules_optional">Optional</string>
+    <string name="therules_step3content">If not sure of answer, click Image to reveal clue,\"Urban Legend\", then repeat step 2.</string>
+
+
+    <string name="visit_url">http://www.punnyfuzzles.com/</string>
+    <string name="str_credit">Available Credits</string>
+
+
+    <string name="subscription_period_prompt">Select your subscription period</string>
+    <string name="subscription_resignup_prompt">To reactivate your subscription, select your subscription period</string>
+    <string name="subscription_update_prompt">To change your subscription, select your new subscription period</string>
+    <string name="subscription_period_monthly">Monthly</string>
+    <string name="subscription_period_yearly">Yearly</string>
+    <string name="subscription_prompt_continue">Continue</string>
+    <string name="subscription_prompt_cancel">Cancel</string>
+    <string name="content_description_app_loading_image">App loading image</string>
+    <string name="content_description_title_image">80\'s Video Game Style Car Logo</string>
+    <string name="content_desc_gas_gauge_indicator">Gas gauge indicator</string>
+    <string name="content_desc_free_vs_premium_indicator">Free or Premium Image Indicator</string>
+    <!--Errors-->
+    <string name="time_our_error">Time out.</string>
+    <string name="can_not_connect">No Internet Connection Available.</string>
+    <string name="auth_fail">Authentication Failed.</string>
+    <string name="server_error">Server error.</string>
+    <string name="netwotk_error">Unable to connect with network.</string>
+    <string name="parser_error">Parse error.</string>
+    <string name="unknow_error_txt">Unknown Error.</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="title_activity__view__profile">Activity_View_Profile</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="hint_view_message">View Message</string>
+    <string name="processing">Processing...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="mis_permission_rationale_write_storage">Storage write permission is needed to save the image.</string>
+    <string name="mis_permission_rationale">Storage read permission is needed to pick files.</string>
+    <string name="mis_folder_all">All Images</string>
+    <string name="mis_preview">Preview</string>
+    <string name="mis_msg_no_camera">No system camera found</string>
+    <string name="mis_msg_amount_limit">Select images amount is limit</string>
+    <string name="mis_action_done">Done</string>
+    <string name="mis_action_button_string">%1$s(%2$d/%3$d)</string>
+    <string name="mis_photo_unit">Shot</string>
+    <string name="mis_tip_take_photo">Take photo</string>
+    <string name="mis_error_image_not_exist">Image error</string>
+    <string name="mis_error_no_permission">Has no permission</string>
+    <string name="mis_permission_dialog_title">Permission Deny</string>
+    <string name="mis_permission_dialog_ok">OK</string>
+    <string name="mis_permission_dialog_cancel">CANCEL</string>
+
+</resources>

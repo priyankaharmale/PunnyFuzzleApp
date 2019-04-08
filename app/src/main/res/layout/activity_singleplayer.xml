@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:foregroundGravity="top|center">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header"
+        android:paddingRight="10dp"
+        android:title="@string/some_text_to_display">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_back"
+            android:onClick="btnBack_onClick"
+            android:text="@string/none_to_display"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/header_text" />
+
+        <ImageButton
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_logout"
+            android:onClick="btnLogin_onClick"
+            android:text="@string/none_to_display"
+            android:visibility="gone" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:id="@+id/rl_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimens_60dp"
+        android:layout_below="@+id/toolbar">
+
+        <TextView
+            android:id="@+id/tv_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimens_10dp"
+            android:text="Mike"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_20" />
+
+        <ImageView
+            android:id="@+id/switch_sound"
+            android:layout_width="@dimen/dimens_50dp"
+            android:layout_height="@dimen/dimens_50dp"
+            android:layout_alignParentRight="true"
+            android:checked="true"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:src="@drawable/volume_off_indicatornew"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/bg"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/lbl_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/singleplayer_cant_connect"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/lbl_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/singleplayer_check_conn"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/btn_retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/retry"
+            android:onClick="btnRetry_onClick" />
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout"
+        android:layout_below="@+id/rl_header"
+        android:background="@drawable/bg"
+        android:scrollbars="vertical"
+        android:visibility="gone" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="95dp"
+        android:layout_above="@+id/horizontal_line"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5">
+
+            <TextView
+                android:id="@+id/lbl_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:text="@string/singleplayer_score"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/lbl_current_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/lbl_score"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:text="0"
+                android:textColor="@color/color_appname"
+                android:textSize="18sp" />
+
+            <ProgressBar
+                android:id="@+id/progressbar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toLeftOf="@+id/timerValue"
+                android:max="100"
+                android:progress="0" />
+
+            <TextView
+                android:id="@+id/timerValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:paddingBottom="5dp"
+                android:paddingLeft="10dp"
+                android:text="Time : "
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_submit"
+                android:onClick="btnSubmit_onClick"
+                android:text="@string/none_to_display"
+                android:textColor="@android:color/black" />
+
+            <ImageButton
+                android:id="@+id/btn_get_more_puzzle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_get_more_puzzles"
+                android:onClick="btnGetMorePuzzle_onClick"
+                android:text="@string/none_to_display"
+                android:textColor="@android:color/black"
+               />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@+id/layout_bottom"
+        android:background="@color/lightgray" />
+
+    <RelativeLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="@color/footer"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_facebook"
+            android:layout_centerHorizontal="true"
+            android:text="@string/copyright"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/img_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:layout_toLeftOf="@+id/img_twitter"
+            android:src="@drawable/facebook"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_twitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:layout_toLeftOf="@+id/img_googleplus"
+            android:src="@drawable/twitter"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_googleplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:src="@drawable/googleplus"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
