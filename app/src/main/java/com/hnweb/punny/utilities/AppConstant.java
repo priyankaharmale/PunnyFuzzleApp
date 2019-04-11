@@ -79,4 +79,13 @@ public class AppConstant {
     public static String GET_SCORE_MULTI = BASEURL + "mul_score_board.php";
 
     public static String QUITE_PUZZLE = BASEURL + "mul_quite_puzzel.php";
+
+
+    /*SingleAplyer*/
+
+    public static String GET_SINGLE_PUZLLE_TIER = BASEURL + "single_get_tier.php";
+
+    public static String SINGLE_PURCHASE_PLAN = BASEURL + "single_purchase_plan.php";
+    public static String GET_SINGLE_CREDIT_PLAN = BASEURL + "single_get_credit_plans.php";
+
 }

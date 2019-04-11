@@ -29,6 +29,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.hnweb.punny.singleplayer.SinglePlayerPuzzlePurchase;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
@@ -352,6 +353,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void dialogChoosePlayer() {
 
+        //getCreditcount();
+
         dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -372,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
         tv_sinngleplayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(activity, SinglePlayerActivity.class);
+                Intent intent = new Intent(activity, SinglePlayerPuzzlePurchase.class);
                 startActivity(intent);
                 dialog.dismiss();
             }
@@ -410,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
 
                             } else {
                                 message = j.getString("message");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                               /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                                 builder.setMessage(message)
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -418,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         });
                                 AlertDialog alert = builder.create();
-                                alert.show();
+                                alert.show();*/
                             }
                         } catch (JSONException e) {
                             System.out.println("jsonexeption" + e.toString());

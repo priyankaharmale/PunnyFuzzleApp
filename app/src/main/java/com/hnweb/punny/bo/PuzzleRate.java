@@ -1,10 +1,18 @@
 package com.hnweb.punny.bo;
 
 public class PuzzleRate {
-   String tid, amount, puzzle, title, updated_dt, deleted,pid,credit;
+   String tid, amount, puzzle, title, updated_dt, deleted,pid,credit,played_status;
 
     public String getPid() {
         return pid;
+    }
+
+    public String getPlayed_status() {
+        return played_status;
+    }
+
+    public void setPlayed_status(String played_status) {
+        this.played_status = played_status;
     }
 
     public String getCredit() {

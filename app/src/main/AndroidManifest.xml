@@ -52,6 +52,12 @@
             android:name=".SinglePalyerScoreActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".singleplayer.SinglePlayerPuzzlePurchase"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".singleplayer.SinglePlayerCreditListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ScoreboardListActivity"
             android:screenOrientation="portrait" />
         <activity
