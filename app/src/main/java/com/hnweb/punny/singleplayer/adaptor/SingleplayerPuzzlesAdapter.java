@@ -1,4 +1,4 @@
-package com.hnweb.punny.adapters;
+package com.hnweb.punny.singleplayer.adaptor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,7 +21,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -29,21 +28,18 @@ import com.hnweb.punny.MultiPlayerActivity;
 import com.hnweb.punny.R;
 import com.hnweb.punny.bo.Puzzle;
 import com.hnweb.punny.interfaces.OnCallBack;
+import com.hnweb.punny.singleplayer.SinglePlayerPuzzleListActivity;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
 import com.hnweb.punny.utilities.AppUtils;
 import com.hnweb.punny.utilities.Utilities;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiplayerPuzzlesAdapter extends RecyclerView.Adapter<MultiplayerPuzzlesAdapter.MyViewHolder> {
+public class SingleplayerPuzzlesAdapter extends RecyclerView.Adapter<SingleplayerPuzzlesAdapter.MyViewHolder> {
 
     private List<Puzzle> puzzleList;
     private Activity activity;
@@ -78,7 +74,7 @@ public class MultiplayerPuzzlesAdapter extends RecyclerView.Adapter<MultiplayerP
     }
 
 
-    public MultiplayerPuzzlesAdapter(List<Puzzle> puzzleList, Activity activity, String pid, OnCallBack onCallBack) {
+    public SingleplayerPuzzlesAdapter(List<Puzzle> puzzleList, Activity activity, String pid, OnCallBack onCallBack) {
         this.puzzleList = puzzleList;
         this.activity = activity;
         this.pid = pid;
@@ -207,7 +203,7 @@ public class MultiplayerPuzzlesAdapter extends RecyclerView.Adapter<MultiplayerP
     }
 
     public void refreshAdapter() {
-        MultiplayerPuzzlesAdapter.this.notifyDataSetChanged();
+        SingleplayerPuzzlesAdapter.this.notifyDataSetChanged();
     }
 
     private class CheckAnswer extends AsyncTask<String, Void, Boolean> {
@@ -314,7 +310,7 @@ public class MultiplayerPuzzlesAdapter extends RecyclerView.Adapter<MultiplayerP
 
     private void getMultiPuzzleList(final String id, final String answer) {
         showProgressDialog();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GIVE_MULTI_ANSWER,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GIVE_SINGLE_ANSWER,
                 new Response.Listener<String>() {
 
                     @Override
@@ -338,7 +334,7 @@ public class MultiplayerPuzzlesAdapter extends RecyclerView.Adapter<MultiplayerP
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
                 try {
-                    final String time = MultiPlayerActivity.timerValue.getText().toString();
+                    final String time = SinglePlayerPuzzleListActivity.chronometer.getText().toString();
 
                     params.put("pid", pid);
                     params.put("user_id", AppConstant.LOGIN_ID);

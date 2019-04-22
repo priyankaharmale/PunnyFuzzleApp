@@ -58,6 +58,9 @@
             android:name=".singleplayer.SinglePlayerCreditListActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".singleplayer.SinglePlayerPuzzleListActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ScoreboardListActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -80,6 +83,9 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".CreditListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ThrowtowelActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".MultiplayerScoreActivity"

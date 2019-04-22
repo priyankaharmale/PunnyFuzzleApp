@@ -1,10 +1,11 @@
-package com.hnweb.punny;
+package com.hnweb.punny.singleplayer;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -38,12 +39,20 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.hnweb.punny.adapters.MultiplayerPuzzlesAdapter;
+import com.hnweb.punny.CreditListActivity;
+import com.hnweb.punny.InviteFriendActivity;
+import com.hnweb.punny.LoginActivity;
+import com.hnweb.punny.MainActivity;
+import com.hnweb.punny.R;
+import com.hnweb.punny.ScoreActivity;
+import com.hnweb.punny.ScoreboardListActivity;
+import com.hnweb.punny.SinglePalyerScoreActivity;
 import com.hnweb.punny.adapters.NotificationAdaptor;
 import com.hnweb.punny.bo.Notification;
 import com.hnweb.punny.bo.NotificationUpdateModel;
 import com.hnweb.punny.bo.Puzzle;
 import com.hnweb.punny.interfaces.OnCallBack;
+import com.hnweb.punny.singleplayer.adaptor.SingleplayerPuzzlesAdapter;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
@@ -59,16 +68,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
- * Created by Priyanka Harmale on 02/01/2018.
+ * Created by Priyanka Harmale on 12/04/2019.
  */
 
-public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack, NotificationUpdateModel.OnCustomStateListener {
+public class SinglePlayerPuzzleListActivity extends AppCompatActivity implements OnCallBack, NotificationUpdateModel.OnCustomStateListener {
 
-    private String TAG = MultiPlayerActivity.class.getSimpleName();
+    private String TAG = SinglePlayerPuzzleListActivity.class.getSimpleName();
     private Activity activity;
     ImageView iv_close;
     private Boolean continueMusic = true;
@@ -79,7 +86,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
     NotificationAdaptor notificationAdaptor;
     private TextView lbl_current_score;
     private RecyclerView recyclerView;
-    private MultiplayerPuzzlesAdapter mAdapter;
+    private SingleplayerPuzzlesAdapter mAdapter;
     private ProgressDialog pDialog1;
     private ProgressDialog pDialog2;
     private ProgressDialog pDialog3;
@@ -126,7 +133,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             Intent intent = getIntent();
-            pid = intent.getStringExtra("id");
+            pid = intent.getStringExtra("pid");
             pDialog = new ProgressDialog(this);
             pDialog.setMessage("Loading...");
             pDialog.setCancelable(true);
@@ -144,6 +151,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
             btn_scoreboard = findViewById(R.id.btn_scoreboard);
             notificationframe = findViewById(R.id.frame);
             timerValue = findViewById(R.id.timerValue);
+            timerValue.setVisibility(View.GONE);
             pDialog1 = new ProgressDialog(this);
             pDialog1.setMessage("Fetching Data...");
             pDialog1.setCancelable(true);
@@ -263,8 +271,8 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
             Log.e(AppConstant.TAG, "Error(SinglePlayerActivity):" + ex.toString());
             Toast.makeText(this, "Error(SinglePlayerActivity):" + ex.toString(), Toast.LENGTH_LONG).show();
         }
-       /* startTime = SystemClock.uptimeMillis();
-        customHandler.postDelayed(updateTimerThread, 0);*/
+        startTime = SystemClock.uptimeMillis();
+        customHandler.postDelayed(updateTimerThread, 0);
      /*   final long startTime = 10 * 60 * 1000;
         final long interval = 1 * 1000;
         final long startNewTime = 1 * 60 * 1000;
@@ -290,39 +298,12 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
         });
         chronometer = findViewById(R.id.chronometer);
 
-       /* chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+        chronometer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometerChanged) {
                 chronometer = chronometerChanged;
             }
-        });*/
-
-        chronometer.setVisibility(View.GONE);
-        CountDownTimer cT = new CountDownTimer(300000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-
-
-                String v = String.format("%02d", millisUntilFinished / 60000);
-                int va = ( int ) ((millisUntilFinished % 60000) / 1000);
-
-                long updatemilisec = 300000 - millisUntilFinished;
-
-                String v1 = String.format("%02d", updatemilisec / 60000);
-                int va2 = ( int ) ((updatemilisec % 60000) / 1000);
-
-                Log.e(AppConstant.TAG, v1 + ":" + String.format("%02d", va2));
-
-                timerValue.setText(v1 + ":" + String.format("%02d", va2));
-            }
-
-            public void onFinish() {
-                timerValue.setText("5:00");
-
-                submitpuzzle();
-            }
-        };
-        cT.start();
+        });
 
 
         getNotificationCount();
@@ -412,16 +393,6 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
         }
     }
 
-    /*public void btnGetMorePuzzle_onClick(View view) {
-        try {
-            Intent intent = new Intent(activity, inapp.class);
-            startActivity(intent);
-        } catch (Exception ex) {
-            Log.e(AppConstant.TAG, "Error(btnGetMorePuzzle_onClick):" + ex.toString());
-            Toast.makeText(this, "Error:" + ex.toString(), Toast.LENGTH_LONG).show();
-        }
-    }
-*/
     public void btnRetry_onClick(View view) {
         try {
 
@@ -436,18 +407,12 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
         }
     }
 
-    private void showProgressDialog1() {
-        pDialog1.show();//this, "", "Fetching Data...");
-    }
 
     private void hideProgressDialog1() {
         if (pDialog1.isShowing())
             pDialog1.hide();
     }
 
-    private void showProgressDialog2() {
-        pDialog2.show();//this, "", "Fetching Data...");
-    }
 
     private void hideProgressDialog2() {
         if (pDialog2.isShowing())
@@ -632,9 +597,10 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
 
     private void getMultiPuzzleList() {
         showProgressDialog();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_MULTI_PUZZLES_LIST,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_SINGLE_PUZZLES_LIST,
                 new Response.Listener<String>() {
 
+                    @SuppressLint("NewApi")
                     @Override
                     public void onResponse(String response) {
                         puzzlelist = new ArrayList<Puzzle>();
@@ -702,12 +668,14 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                                 } else {
                                     btn_submit.setVisibility(View.GONE);
                                 }
-                              /*  if (play_time.equalsIgnoreCase("") || play_time == null) {
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                                        c.setCountDown(true);
+                                if (play_time.equalsIgnoreCase("") || play_time == null) {
+
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                        chronometer.setCountDown(true);
                                     }
+
                                     long dayInMilli = 60 * 60 * 24 * 1000;
-                                    chronometer.setBase(SystemClock.elapsedRealtime());
+                                 //   chronometer.setBase(SystemClock.elapsedRealtime());
                                     chronometer.start();
                                 } else {
 
@@ -725,7 +693,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
 
                                     if (status1.equalsIgnoreCase("complete")) {
                                         chronometer.stop();
-                                        Utilities.showAlertDailog(MultiPlayerActivity.this, "PunnyFuzzles", "Puzzle Completed Successfully..Please submit it", "Ok",
+                                        Utilities.showAlertDailog(SinglePlayerPuzzleListActivity.this, "PunnyFuzzles", "Puzzle Completed Successfully..Please submit it", "Ok",
                                                 new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface arg0, int arg1) {
@@ -739,10 +707,10 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                                     }
 
 
-                                }*/
+                                }
                             }
 
-                            mAdapter = new MultiplayerPuzzlesAdapter(puzzlelist, activity, pid, onCallBack);
+                            mAdapter = new SingleplayerPuzzlesAdapter(puzzlelist, activity, pid, onCallBack);
                             Log.e("puzleList", String.valueOf(puzzlelist.size()));
                             recyclerView.setAdapter(mAdapter);
                         } catch (JSONException e) {
@@ -753,8 +721,8 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(MultiPlayerActivity.this, error);
-                        AlertUtility.showAlert(MultiPlayerActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(SinglePlayerPuzzleListActivity.this, error);
+                        AlertUtility.showAlert(SinglePlayerPuzzleListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -775,14 +743,14 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(MultiPlayerActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerPuzzleListActivity.this);
         requestQueue.add(stringRequest);
 
     }
 
     private void submitpuzzle() {
         showProgressDialog();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.SUBMIT_PUZZLE,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.SINGLE_SUBMIT_PUZZLE,
                 new Response.Listener<String>() {
 
                     @Override
@@ -801,7 +769,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface arg0, int arg1) {
-                                                Intent intent = new Intent(getApplicationContext(), MultiplayerScoreActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(), SinglePalyerScoreActivity.class);
                                                 intent.putExtra("pid", pid);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 startActivity(intent);
@@ -829,8 +797,8 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(MultiPlayerActivity.this, error);
-                        AlertUtility.showAlert(MultiPlayerActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(SinglePlayerPuzzleListActivity.this, error);
+                        AlertUtility.showAlert(SinglePlayerPuzzleListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -853,7 +821,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(MultiPlayerActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerPuzzleListActivity.this);
         requestQueue.add(stringRequest);
 
     }
@@ -875,11 +843,11 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                             String message = jobj.getString("message");
 
                             if (message_code == 1) {
-                                Utilities.showAlertDailog(activity, "PunnyFuzzles", "Puzzle Quite Successfully", "Ok",
+                                Utilities.showAlertDailog(activity, "PunnyFuzzles", message, "Ok",
                                         new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface arg0, int arg1) {
-                                                Intent intent = new Intent(getApplicationContext(), ThrowtowelActivity.class);
+                                                Intent intent = new Intent(getApplicationContext(), CreditListActivity.class);
                                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                                 startActivity(intent);
                                                 finish();
@@ -906,8 +874,8 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(MultiPlayerActivity.this, error);
-                        AlertUtility.showAlert(MultiPlayerActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(SinglePlayerPuzzleListActivity.this, error);
+                        AlertUtility.showAlert(SinglePlayerPuzzleListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -930,7 +898,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(MultiPlayerActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerPuzzleListActivity.this);
         requestQueue.add(stringRequest);
 
     }
@@ -1022,7 +990,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
     public void dialogNotificationDetails() {
 
 
-        final AlertDialog.Builder dialogBuilder1 = new AlertDialog.Builder(MultiPlayerActivity.this);
+        final AlertDialog.Builder dialogBuilder1 = new AlertDialog.Builder(SinglePlayerPuzzleListActivity.this);
 
         LayoutInflater inflater1 = getLayoutInflater();
         final View dialogView1 = inflater1.inflate(R.layout.dialog_notificationlist, null);
@@ -1083,12 +1051,12 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                                     notifications.add(puzzleRate);
                                     Log.d("ArraySize", String.valueOf(notifications.size()));
                                 }
-                                notificationAdaptor = new NotificationAdaptor(MultiPlayerActivity.this, notifications);
+                                notificationAdaptor = new NotificationAdaptor(SinglePlayerPuzzleListActivity.this, notifications);
                                 recycler_view.setAdapter(notificationAdaptor);
                             } else {
 
                                 msg = jobj.getString("message");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(MultiPlayerActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SinglePlayerPuzzleListActivity.this);
                                 builder.setMessage(msg)
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -1110,8 +1078,8 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(MultiPlayerActivity.this, error);
-                        AlertUtility.showAlert(MultiPlayerActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(SinglePlayerPuzzleListActivity.this, error);
+                        AlertUtility.showAlert(SinglePlayerPuzzleListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -1132,7 +1100,7 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(MultiPlayerActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerPuzzleListActivity.this);
         requestQueue.add(stringRequest);
 
     }
@@ -1192,10 +1160,13 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
 
     @Override
     public void onBackPressed() {
-        //  super.onBackPressed();
+        super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), SinglePlayerCreditListActivity.class);
+        startActivity(intent);
+        finish();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(MultiPlayerActivity.this);
-        builder.setMessage("Are you sure you want to Quite the Puzzle?")
+      /*  AlertDialog.Builder builder = new AlertDialog.Builder(SinglePlayerPuzzleListActivity.this);
+        builder.setMessage("Are you sure you want to quite the game?")
                 .setCancelable(false)
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -1212,6 +1183,6 @@ public class MultiPlayerActivity extends AppCompatActivity implements OnCallBack
 
 
         AlertDialog alert = builder.create();
-        alert.show();
+        alert.show();*/
     }
 }

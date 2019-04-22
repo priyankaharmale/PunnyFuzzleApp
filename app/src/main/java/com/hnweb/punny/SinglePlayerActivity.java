@@ -22,20 +22,32 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.hnweb.punny.adapters.MultiplayerPuzzlesAdapter;
 import com.hnweb.punny.adapters.PuzzlesAdapter;
 import com.hnweb.punny.bo.Puzzle;
+import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
+import com.hnweb.punny.utilities.AppUtils;
 import com.hnweb.punny.utilities.MusicManager;
 import com.hnweb.punny.utilities.Utilities;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Priyanka Harmale on 02/01/2018.
@@ -63,6 +75,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
     private TextView timerValue;
 
     private long startTime = 0L;
+    ArrayList<Puzzle> puzzlelist;
 
     private Handler customHandler = new Handler();
 
@@ -71,7 +84,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
     long updatedTime = 0L;
     TextView tv_userName;
     ImageView iv_sound;
-
+    String id;
     Boolean isplayed = true;
 
     @Override
@@ -79,6 +92,8 @@ public class SinglePlayerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_singleplayer);
 
+        Intent intent = getIntent();
+        id = intent.getStringExtra("pid");
 
         try {
             activity = this;
@@ -349,7 +364,7 @@ public class SinglePlayerActivity extends AppCompatActivity {
             pDialog4.hide();
     }
 
-    private void getPuzzleList() {
+    /*private void getPuzzleList() {
         showProgressDialog2();
         String url;
         if (AppConstant.IS_LOGIN) {
@@ -446,7 +461,158 @@ public class SinglePlayerActivity extends AppCompatActivity {
         // Adding request to request queue
         App.getInstance().addToRequestQueue(jsonObjReq, TAG);
 
+    }*/
+
+    private void getPuzzleList() {
+        showProgressDialog2();
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_SINGLE_PUZZLES_LIST,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        puzzlelist = new ArrayList<Puzzle>();
+
+                        System.out.println("GET_Single_PUZZLES_LIST" + response);
+                        hideProgressDialog2();
+                        Log.i("Response", "MessagesResponse= " + response);
+                        try {
+                            JSONObject jobj = new JSONObject(response);
+                            int message_code = jobj.getInt("message_code");
+
+                            if (message_code == 1) {
+                                String status1 = jobj.getString("status");
+                                Log.i("status1", status1);
+
+                                // play_time = jobj.getString("play_time");
+                                // Log.i("play_time", play_time);
+
+                                String played_puzzel_cnt = jobj.getString("played_puzzel_cnt");
+                                String total_puzzel = jobj.getString("total_puzzel");
+                                String score = jobj.getString("score");
+                                puzzlelist.clear();
+                                JSONArray jsonArray = jobj.getJSONArray("puzzle_list");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jObject = jsonArray.getJSONObject(i);
+                                    String id = /*(i + 1) + "";*/ jObject.getString("id");
+                                    String pnumber = jObject.getString("pnumber");
+                                    String section = jObject.getString("section");
+                                    String primary_word = jObject.getString("primary_word");
+                                    String image_caption = jObject.getString("image_caption");
+                                    String image_url = jObject.getString("image_url");
+                                    String full_image_path = jObject.getString("full_image_path");
+                                    String solution = jObject.getString("solution");
+                                    String added_date = jObject.getString("added_date");
+                                    String status = jObject.getString("status");
+                                    String options = jObject.getString("options");
+                                    String spoonerism = jObject.getString("spoonerism");
+                                    String played_status = jObject.getString("played_status");
+
+
+                                    Puzzle p = new Puzzle();
+                                    p.setId(id);
+                                    p.setPnumber(pnumber);
+                                    p.setSection(section);
+                                    p.setPrimary_word(primary_word);
+                                    p.setImage_caption(image_caption);
+                                    p.setImage_url(image_url);
+                                    p.setFull_image_path(full_image_path);
+                                    p.setSolution(solution);
+                                    p.setAdded_date(added_date);
+                                    p.setStatus(status);
+                                    p.setOptions(options);
+                                    p.setSpoonerism(spoonerism);
+                                    p.setPlayed_status(played_status);
+
+                                    puzzlelist.add(p);
+
+                                }
+                               /* pb.setMax(Integer.parseInt(total_puzzel));
+                                pb.setProgress(Integer.parseInt(played_puzzel_cnt));
+                                lbl_current_score.setText(score);
+                                pb.setText(played_puzzel_cnt + "/" + total_puzzel);
+                                if (status1.equalsIgnoreCase("complete")) {
+                                    btn_submit.setVisibility(View.VISIBLE);
+                                } else {
+                                    btn_submit.setVisibility(View.GONE);
+                                }*/
+                              /*  if (play_time.equalsIgnoreCase("") || play_time == null) {
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                        c.setCountDown(true);
+                                    }
+                                    long dayInMilli = 60 * 60 * 24 * 1000;
+                                    chronometer.setBase(SystemClock.elapsedRealtime());
+                                    chronometer.start();
+                                } else {
+
+                                    long total = 0;
+                                    String array[] = play_time.split(":");
+                                    if (array.length == 2) {
+                                        total = Integer.parseInt(array[0]) * 60 * 1000 + Integer.parseInt(array[1]) * 1000;
+                                    } else if (array.length == 3) {
+                                        total =
+                                                Integer.parseInt(array[0]) * 60 * 60 * 1000 + Integer.parseInt(array[1]) * 60 * 1000
+                                                        + Integer.parseInt(array[2]) * 1000;
+                                    }
+
+                                    chronometer.setBase(SystemClock.elapsedRealtime() - total);
+
+                                    if (status1.equalsIgnoreCase("complete")) {
+                                        chronometer.stop();
+                                        Utilities.showAlertDailog(MultiPlayerActivity.this, "PunnyFuzzles", "Puzzle Completed Successfully..Please submit it", "Ok",
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface arg0, int arg1) {
+
+
+                                                    }
+                                                }, false);
+                                    } else {
+
+                                        chronometer.start();
+                                    }
+
+
+                                }*/
+                            }
+
+                            mAdapter = new PuzzlesAdapter(puzzlelist, activity, lbl_current_score);
+                            Log.e("puzleList", String.valueOf(puzzlelist.size()));
+                            recyclerView.setAdapter(mAdapter);
+                        } catch (JSONException e) {
+                            System.out.println("jsonexeption" + e.toString());
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        String reason = AppUtils.getVolleyError(SinglePlayerActivity.this, error);
+                        AlertUtility.showAlert(SinglePlayerActivity.this, reason);
+                        System.out.println("jsonexeption" + error.toString());
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                try {
+                    params.put("pid", id);
+                    Log.e("pid", id);
+                } catch (Exception e) {
+                    System.out.println("error" + e.toString());
+                }
+                return params;
+            }
+        };
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(30000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        stringRequest.setShouldCache(false);
+        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerActivity.this);
+        requestQueue.add(stringRequest);
+
     }
+
 
     private void getPuzzleData() {
         showProgressDialog1();

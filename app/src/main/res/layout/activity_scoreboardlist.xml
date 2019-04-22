@@ -59,8 +59,8 @@
 
             <ImageView
                 android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/text_20"
                 android:layout_marginTop="20dp"
@@ -130,7 +130,7 @@
                         android:layout_marginLeft="@dimen/dimens_8dp"
                         android:layout_weight="0.3"
 
-                        android:text="Solved \nPuzzels"
+                        android:text="Solved \nPuzzles"
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp" />
 

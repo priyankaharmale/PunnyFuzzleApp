@@ -35,6 +35,7 @@ import com.hnweb.punny.adapters.NotificationAdaptor;
 import com.hnweb.punny.bo.Notification;
 import com.hnweb.punny.bo.NotificationUpdateModel;
 import com.hnweb.punny.bo.PuzzleRate;
+import com.hnweb.punny.singleplayer.adaptor.SinglePlayerCreditsAdaptor;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.AppConstant;
 import com.hnweb.punny.utilities.AppUtils;
@@ -50,7 +51,7 @@ import java.util.Map;
 public class SinglePlayerCreditListActivity extends AppCompatActivity implements NotificationUpdateModel.OnCustomStateListener {
     RecyclerView recycler_view;
     ProgressDialog pDialog;
-    CreditsAdaptor puzzleRateAdaptor;
+    SinglePlayerCreditsAdaptor puzzleRateAdaptor;
     ArrayList<PuzzleRate> puzzleRates;
     TextView tv_credit;
     ImageButton btn_back;
@@ -83,7 +84,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
         iv_invite = findViewById(R.id.iv_invite);
         notificationframe = findViewById(R.id.frame);
         btn_scoreboard = findViewById(R.id.btn_scoreboard);
-
+        btn_scoreboard.setVisibility(View.GONE);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,6 +93,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
         });
         getPuzzleRate();
 
+        iv_invite.setVisibility(View.GONE);
         iv_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +101,8 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+        notificationframe.setVisibility(View.GONE);
+
         notificationframe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,7 +161,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
 
                                 }
                                 tv_credit.setText(String.valueOf(puzzleRates.size()));
-                                puzzleRateAdaptor = new CreditsAdaptor(SinglePlayerCreditListActivity.this, puzzleRates);
+                                puzzleRateAdaptor = new SinglePlayerCreditsAdaptor(SinglePlayerCreditListActivity.this, puzzleRates);
                                 recycler_view.setAdapter(puzzleRateAdaptor);
                             } else {
 

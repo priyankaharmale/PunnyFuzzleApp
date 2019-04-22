@@ -70,7 +70,7 @@ public class ScoreActivity extends AppCompatActivity {
             Log.e(AppConstant.TAG, "Error(ScoreActivity):" + ex.toString());
             Toast.makeText(this, "Error:" + ex.toString(), Toast.LENGTH_LONG).show();
         }
-        Glide.with(this).load(R.raw.you_won).asGif().into(trophy_ranking_scoreboard);
+        Glide.with(this).load(R.raw.scoreboard_gif).asGif().into(trophy_ranking_scoreboard);
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override

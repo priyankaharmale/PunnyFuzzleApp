@@ -22,9 +22,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hnweb.punny.R;
-import com.hnweb.punny.SinglePalyerScoreActivity;
-import com.hnweb.punny.SinglePlayerActivity;
 import com.hnweb.punny.bo.PuzzleRate;
+import com.hnweb.punny.singleplayer.SinglePlayerPuzzleListActivity;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
 
@@ -44,7 +43,6 @@ public class SinglePuzzlerateAdaptor extends RecyclerView.Adapter<SinglePuzzlera
     private List<PuzzleRate> mFilteredList;
     String str_startDate;
     String callFrom;
-    String puzzleid, puzzleamout, totalpuzzle;
 
     public SinglePuzzlerateAdaptor(Context context, List<PuzzleRate> data) {
         this.context = context;
@@ -77,13 +75,10 @@ public class SinglePuzzlerateAdaptor extends RecyclerView.Adapter<SinglePuzzlera
         } else {
             holder.tv_puzzlerate.setText(PuzzleRatesList.get(i).getTitle());
         }
-        if(puzzleStatus.equalsIgnoreCase("Pending"))
+        if(puzzleStatus.equalsIgnoreCase("completed"))
         {
-            /*Intent intent = new Intent(context, SinglePlayerActivity.class);
-            context.startActivity(intent);*/
-
-        }else
-        {
+            holder.itemView.setAlpha(.5f);
+            holder.itemView.setBackground(App.getContext().getResources().getDrawable(R.drawable.lock));
 
         }
 
@@ -92,15 +87,22 @@ public class SinglePuzzlerateAdaptor extends RecyclerView.Adapter<SinglePuzzlera
             public void onClick(View view) {
                 if(puzzleStatus.equalsIgnoreCase("Pending"))
                 {
-                    Intent intent = new Intent(context, SinglePlayerActivity.class);
+                    Intent intent = new Intent(context, SinglePlayerPuzzleListActivity.class);
+                    intent.putExtra("pid",PuzzleRatesList.get(i).getPid());
                     context.startActivity(intent);
 
                 }else
                 {
-                    holder.itemView.setAlpha(.5f);
-                    holder.itemView.setBackground(App.getContext().getResources().getDrawable(R.drawable.lock));
+                    if(puzzleStatus.equalsIgnoreCase("completed"))
+                    {
+                        Toast.makeText(context, "Puzzles already played", Toast.LENGTH_SHORT).show();
+                    }else
+                    {
+                        addPaymentInfo("10", PuzzleRatesList.get(i).getTid(), PuzzleRatesList.get(i).getAmount(), PuzzleRatesList.get(i).getPuzzle(), PuzzleRatesList.get(i).getCredit());
 
+                    }
                 }
+
 
               /*  Intent intent = new Intent(context, inappNew.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -149,7 +151,7 @@ public class SinglePuzzlerateAdaptor extends RecyclerView.Adapter<SinglePuzzlera
                             if (message_code == 1) {
                                 String res = j.getString("message");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setMessage(res)
+                                builder.setMessage("Plan Purchased Successfully")
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {

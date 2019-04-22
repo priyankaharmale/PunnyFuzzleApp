@@ -86,6 +86,17 @@ public class AppConstant {
     public static String GET_SINGLE_PUZLLE_TIER = BASEURL + "single_get_tier.php";
 
     public static String SINGLE_PURCHASE_PLAN = BASEURL + "single_purchase_plan.php";
+
     public static String GET_SINGLE_CREDIT_PLAN = BASEURL + "single_get_credit_plans.php";
+
+    public static String GET_SINGLE_PUZZLES_LIST = BASEURL + "single_get_puzzel.php";
+
+    public static String GIVE_SINGLE_ANSWER = BASEURL + "single_give_ans.php";
+
+    public static String SINGLE_SUBMIT_PUZZLE = BASEURL + "single_submit_puzzel.php";
+
+
+
+
 
 }

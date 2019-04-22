@@ -49,10 +49,9 @@
     </android.support.v7.widget.Toolbar>
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="50dp"
         android:id="@+id/trophy_ranking_scoreboard"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:src="@drawable/trophy_ranking_scoreboard" />
 
     <LinearLayout
@@ -194,16 +193,19 @@
 
 
     </LinearLayout>
+
     <Button
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-
         android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dimens_30dp"
+        android:layout_marginRight="@dimen/dimens_30dp"
         android:background="@drawable/play_again_button"
-        android:text="Do you want to play again?"
+        android:text="Do you want to play more?"
         android:textSize="14sp" />
+
     <Button
         android:id="@+id/btn_scoreboard"
         android:layout_width="wrap_content"

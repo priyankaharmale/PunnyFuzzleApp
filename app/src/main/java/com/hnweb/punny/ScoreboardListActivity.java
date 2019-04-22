@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.hnweb.punny.adapters.MultiplayerPuzzlesAdapter;
 import com.hnweb.punny.adapters.ScoreboardListAdaptor;
 import com.hnweb.punny.bo.Puzzle;
@@ -53,7 +54,11 @@ public class ScoreboardListActivity extends AppCompatActivity {
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
         pDialog.setCancelable(true);
-
+       // Glide.with(this).load(R.raw.scoreboard_gif).asGif().into(imageView3);
+        Glide.with(this)
+                .load(R.raw.scoreboard_gif)
+                .into(new GlideDrawableImageViewTarget(
+                        imageView3));
         getScoreBoardList();
     }
 

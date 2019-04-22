@@ -91,6 +91,7 @@ public class SinglePlayerPuzzlePurchase extends AppCompatActivity {
                                     JSONObject jsonObject = userdetails.getJSONObject(j);
                                     PuzzleRate puzzleRate = new PuzzleRate();
                                     puzzleRate.setTid(jsonObject.getString("tid"));
+                                    puzzleRate.setPid(jsonObject.getString("pid"));
                                     puzzleRate.setAmount(jsonObject.getString("amount"));
                                     puzzleRate.setPuzzle(jsonObject.getString("puzzle"));
                                     puzzleRate.setTitle(jsonObject.getString("title"));
