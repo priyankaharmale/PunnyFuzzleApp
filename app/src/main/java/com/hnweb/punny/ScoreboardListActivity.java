@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -19,9 +18,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.hnweb.punny.adapters.MultiplayerPuzzlesAdapter;
 import com.hnweb.punny.adapters.ScoreboardListAdaptor;
-import com.hnweb.punny.bo.Puzzle;
 import com.hnweb.punny.bo.Score;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.AppConstant;

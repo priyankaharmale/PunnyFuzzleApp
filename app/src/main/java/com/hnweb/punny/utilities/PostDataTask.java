@@ -11,8 +11,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static com.hnweb.punny.SplashScreen.EMAIL_KEY;
-import static com.hnweb.punny.SplashScreen.FORM_DATA_TYPE;
+
 
 public class PostDataTask extends AsyncTask<String, Void, Boolean>
 
@@ -26,15 +25,15 @@ public class PostDataTask extends AsyncTask<String, Void, Boolean>
 
         String postBody = "";
 
-        try {
+     /*   try {
 
-            postBody = EMAIL_KEY + "=" + URLEncoder.encode(email, "UTF-8");
+           // postBody = EMAIL_KEY + "=" + URLEncoder.encode(email, "UTF-8");
 
         } catch (UnsupportedEncodingException ex) {
             result = false;
-        }
+        }*/
 
-        try {
+     /*   try {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create(FORM_DATA_TYPE, postBody);
             Request request = new Request.Builder()
@@ -44,7 +43,7 @@ public class PostDataTask extends AsyncTask<String, Void, Boolean>
             Response response = client.newCall(request).execute();
         } catch (IOException exception) {
             result = false;
-        }
+        }*/
         return result;
     }
 

@@ -1,4 +1,4 @@
-package com.hnweb.punny.singleplayer.adaptor;
+package com.hnweb.punny.sixtysecondchallge.adaptor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SingleplayerPuzzlesAdapter extends RecyclerView.Adapter<SingleplayerPuzzlesAdapter.MyViewHolder> {
+public class SixtyPuzzlesAdapter extends RecyclerView.Adapter<SixtyPuzzlesAdapter.MyViewHolder> {
 
     private List<Puzzle> puzzleList;
     private Activity activity;
@@ -73,7 +73,7 @@ public class SingleplayerPuzzlesAdapter extends RecyclerView.Adapter<Singleplaye
     }
 
 
-    public SingleplayerPuzzlesAdapter(List<Puzzle> puzzleList, Activity activity, String pid, OnCallBack onCallBack) {
+    public SixtyPuzzlesAdapter(List<Puzzle> puzzleList, Activity activity, String pid, OnCallBack onCallBack) {
         this.puzzleList = puzzleList;
         this.activity = activity;
         this.pid = pid;
@@ -202,7 +202,7 @@ public class SingleplayerPuzzlesAdapter extends RecyclerView.Adapter<Singleplaye
     }
 
     public void refreshAdapter() {
-        SingleplayerPuzzlesAdapter.this.notifyDataSetChanged();
+        SixtyPuzzlesAdapter.this.notifyDataSetChanged();
     }
 
     private class CheckAnswer extends AsyncTask<String, Void, Boolean> {
@@ -309,7 +309,7 @@ public class SingleplayerPuzzlesAdapter extends RecyclerView.Adapter<Singleplaye
 
     private void getMultiPuzzleList(final String id, final String answer) {
         showProgressDialog();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GIVE_SINGLE_ANSWER,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GIVE_60SEC_ANSWER,
                 new Response.Listener<String>() {
 
                     @Override

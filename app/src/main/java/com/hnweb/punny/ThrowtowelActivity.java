@@ -9,16 +9,22 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.hnweb.punny.multiplayer.activity.CreditListActivity;
+import com.hnweb.punny.sixtysecondchallge.SixtySecondCreditListActivity;
 
 public class ThrowtowelActivity extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGTH = 10000; //splash screen will be shown for 2 seconds
     ImageView iv_gif;
+    String callfrom = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_throwtowel);
         iv_gif = findViewById(R.id.iv_gif);
+
+        Intent intent = getIntent();
+        callfrom = intent.getStringExtra("callfrom");
         /** Called when the activity is first created. */
         Glide.with(this)
                 .load(R.raw.thowingtowel)
@@ -28,9 +34,16 @@ public class ThrowtowelActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                Intent mainIntent = new Intent(ThrowtowelActivity.this, CreditListActivity.class);
-                startActivity(mainIntent);
-                finish();
+                if (callfrom.equalsIgnoreCase("1")) {
+                    Intent mainIntent = new Intent(ThrowtowelActivity.this, CreditListActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                } else if (callfrom.equalsIgnoreCase("2")) {
+                    Intent mainIntent = new Intent(ThrowtowelActivity.this, SixtySecondCreditListActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                }
+
             }
         }, SPLASH_DISPLAY_LENGTH);
 

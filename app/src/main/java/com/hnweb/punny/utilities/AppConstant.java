@@ -96,7 +96,20 @@ public class AppConstant {
     public static String SINGLE_SUBMIT_PUZZLE = BASEURL + "single_submit_puzzel.php";
 
 
+    /*60 Sec Challange */
 
 
+    public static String GET_60SEC_PUZLLE_TIER = BASEURL + "60sec_get_tier.php";
 
+    public static String PURCHASE_PLAN_60SEC = BASEURL + "60sec_purchase_plan.php";
+
+    public static String GET_60SEC_CREDIT_PLAN = BASEURL + "60sec_get_credit_plans.php";
+
+    public static String GET_60SEC_PUZZLES_LIST = BASEURL + "60sec_get_puzzel.php";
+
+    public static String GIVE_60SEC_ANSWER = BASEURL + "60sec_give_ans.php";
+
+    public static String SUBMIT_PUZZLE_60SEC_ = BASEURL + "60sec_submit_puzzel.php";
+
+    public static String QUITE_PUZZLE_60SEC = BASEURL + "60sec_quite_puzzel.php";
 }

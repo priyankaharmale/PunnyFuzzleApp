@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dimens_10dp"
+        android:id="@+id/ll_singleplayer"
         android:background="@drawable/single_player_button_bg"
         android:gravity="center"
         android:orientation="horizontal">
@@ -48,6 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dimens_10dp"
+        android:id="@+id/ll_multiplayer"
+
         android:background="@drawable/single_player_button_bg"
         android:gravity="center"
         android:orientation="horizontal">
@@ -84,7 +87,9 @@
         android:layout_marginTop="@dimen/dimens_10dp"
         android:background="@drawable/single_player_button_bg"
         android:gravity="center"
-android:layout_marginBottom="@dimen/dimens_10dp"
+        android:id="@+id/ll_sixtysecond"
+
+        android:layout_marginBottom="@dimen/dimens_10dp"
         android:orientation="horizontal">
 
         <TextView

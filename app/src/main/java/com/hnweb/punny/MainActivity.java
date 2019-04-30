@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +30,9 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.hnweb.punny.multiplayer.activity.MultiplayerPuzzlePurchase;
 import com.hnweb.punny.singleplayer.SinglePlayerPuzzlePurchase;
+import com.hnweb.punny.sixtysecondchallge.SixtySecondPuzzlePurchase;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
@@ -354,6 +357,7 @@ public class MainActivity extends AppCompatActivity {
     public void dialogChoosePlayer() {
 
         //getCreditcount();
+        LinearLayout ll_singleplayer, ll_sixtysecond, ll_multiplayer;
 
         dialog = new Dialog(MainActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -365,14 +369,20 @@ public class MainActivity extends AppCompatActivity {
         TextView tv_multiplayercredit = dialog.findViewById(R.id.tv_multiplayercredit);
         TextView tv_60Seccredit = dialog.findViewById(R.id.tv_60Seccredit);
 
+        ll_singleplayer=dialog.findViewById(R.id.ll_singleplayer);
+        ll_sixtysecond=dialog.findViewById(R.id.ll_sixtysecond);
+        ll_multiplayer=dialog.findViewById(R.id.ll_multiplayer);
+
         tv_sinngleplayercredit.setText("(" + singleplayer + ")");
         tv_multiplayercredit.setText("(" + multiplayer + ")");
         tv_60Seccredit.setText("(" + sixtrysecchallenge + ")");
 
+
+
         dialog.show();
 
         dialog.setCancelable(true);
-        tv_sinngleplayer.setOnClickListener(new View.OnClickListener() {
+        ll_singleplayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, SinglePlayerPuzzlePurchase.class);
@@ -380,10 +390,19 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        tv_multiplayer.setOnClickListener(new View.OnClickListener() {
+        ll_multiplayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(activity, MultiplayerPuzzlePurchase.class);
+                startActivity(intent);
+                dialog.dismiss();
+
+            }
+        });
+        ll_sixtysecond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, SixtySecondPuzzlePurchase.class);
                 startActivity(intent);
                 dialog.dismiss();
 

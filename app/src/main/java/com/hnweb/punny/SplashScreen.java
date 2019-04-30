@@ -22,9 +22,9 @@ public class SplashScreen extends Activity {
     private Boolean continueMusic;
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 3000;
-    public static final String URL = "https://docs.google.com/forms/d/e/1FAIpQLSf2LNSEcFhHnNG6w94c1XG0QeFBQD1Ni2sy1srsfLOlATLXZg/formResponse";
-    public static final String EMAIL_KEY = "entry.2044416652";
-    public static final MediaType FORM_DATA_TYPE = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
+   // public static final String URL = "https://docs.google.com/forms/d/e/1FAIpQLSf2LNSEcFhHnNG6w94c1XG0QeFBQD1Ni2sy1srsfLOlATLXZg/formResponse";
+  //  public static final String EMAIL_KEY = "entry.2044416652";
+  //  public static final MediaType FORM_DATA_TYPE = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
     SharedPreferences sharedpreferences;
 
     @Override
@@ -40,8 +40,8 @@ public class SplashScreen extends Activity {
         AppConstant.LOGIN_EMAIL = sharedpreferences.getString(AppConstant.SHARE_PREF_USEREMAIL, "");
         AppConstant.TOTAL_PUZZLES = 5;
 
-        PostDataTask postDataTask = new PostDataTask();
-        postDataTask.execute(URL, deviceInfo());
+      //  PostDataTask postDataTask = new PostDataTask();
+       // postDataTask.execute(URL, deviceInfo());
 
         if (!AppConstant.IS_LOGIN) {
             Utilities.setAttemptedQuestions("");

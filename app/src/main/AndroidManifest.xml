@@ -67,7 +67,7 @@
             android:name=".SinglePlayerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MultiPlayerActivity"
+            android:name=".multiplayer.activity.MultiPlayerActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".InviteFriendActivity"
@@ -79,19 +79,27 @@
             android:name=".inappNew"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MultiplayerPuzzlePurchase"
+            android:name=".multiplayer.activity.MultiplayerPuzzlePurchase"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".CreditListActivity"
+            android:name=".multiplayer.activity.CreditListActivity"
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ThrowtowelActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".MultiplayerScoreActivity"
+            android:name=".multiplayer.activity.MultiplayerScoreActivity"
             android:screenOrientation="portrait"></activity>
 
-
+        <activity
+            android:name=".sixtysecondchallge.SixtySecondPuzzlePurchase"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".sixtysecondchallge.SixtySecondCreditListActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".sixtysecondchallge.SixtySecPuzzleListActivity"
+            android:screenOrientation="portrait"></activity>
         <!-- Firebase Service start -->
         <service
             android:name=".fierbase.MyFirebaseMessagingService"

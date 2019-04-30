@@ -1,4 +1,4 @@
-package com.hnweb.punny.adapters;
+package com.hnweb.punny.multiplayer.adaptor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

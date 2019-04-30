@@ -2,7 +2,6 @@ package com.hnweb.punny;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.hnweb.punny.multiplayer.activity.CreditListActivity;
 import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
 import com.hnweb.punny.utilities.MusicManager;

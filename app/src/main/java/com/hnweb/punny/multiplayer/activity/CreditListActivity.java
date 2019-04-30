@@ -1,4 +1,4 @@
-package com.hnweb.punny.singleplayer;
+package com.hnweb.punny.multiplayer.activity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -30,11 +30,11 @@ import com.android.volley.toolbox.Volley;
 import com.hnweb.punny.InviteFriendActivity;
 import com.hnweb.punny.R;
 import com.hnweb.punny.ScoreboardListActivity;
+import com.hnweb.punny.multiplayer.adaptor.CreditsAdaptor;
 import com.hnweb.punny.adapters.NotificationAdaptor;
 import com.hnweb.punny.bo.Notification;
 import com.hnweb.punny.bo.NotificationUpdateModel;
 import com.hnweb.punny.bo.PuzzleRate;
-import com.hnweb.punny.singleplayer.adaptor.SinglePlayerCreditsAdaptor;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.AppConstant;
 import com.hnweb.punny.utilities.AppUtils;
@@ -47,10 +47,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SinglePlayerCreditListActivity extends AppCompatActivity implements NotificationUpdateModel.OnCustomStateListener {
+public class CreditListActivity extends AppCompatActivity implements NotificationUpdateModel.OnCustomStateListener {
     RecyclerView recycler_view;
     ProgressDialog pDialog;
-    SinglePlayerCreditsAdaptor puzzleRateAdaptor;
+    CreditsAdaptor puzzleRateAdaptor;
     ArrayList<PuzzleRate> puzzleRates;
     TextView tv_credit;
     ImageButton btn_back;
@@ -83,7 +83,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
         iv_invite = findViewById(R.id.iv_invite);
         notificationframe = findViewById(R.id.frame);
         btn_scoreboard = findViewById(R.id.btn_scoreboard);
-        btn_scoreboard.setVisibility(View.GONE);
+
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,16 +92,13 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
         });
         getPuzzleRate();
 
-        iv_invite.setVisibility(View.GONE);
         iv_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SinglePlayerCreditListActivity.this, InviteFriendActivity.class);
+                Intent intent = new Intent(CreditListActivity.this, InviteFriendActivity.class);
                 startActivity(intent);
             }
         });
-        notificationframe.setVisibility(View.GONE);
-
         notificationframe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +112,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
         btn_scoreboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(SinglePlayerCreditListActivity.this, ScoreboardListActivity.class);
+                Intent intent = new Intent(CreditListActivity.this, ScoreboardListActivity.class);
                 startActivity(intent);
 
             }
@@ -125,7 +122,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
 
     private void getPuzzleRate() {
         showProgressDialog();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_SINGLE_CREDIT_PLAN,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_MULTI_CREDIT_PLAN,
                 new Response.Listener<String>() {
 
                     @Override
@@ -160,12 +157,12 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
 
                                 }
                                 tv_credit.setText(String.valueOf(puzzleRates.size()));
-                                puzzleRateAdaptor = new SinglePlayerCreditsAdaptor(SinglePlayerCreditListActivity.this, puzzleRates);
+                                puzzleRateAdaptor = new CreditsAdaptor(CreditListActivity.this, puzzleRates);
                                 recycler_view.setAdapter(puzzleRateAdaptor);
                             } else {
 
                                 msg = jobj.getString("message");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SinglePlayerCreditListActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(CreditListActivity.this);
                                 builder.setMessage(msg)
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -183,8 +180,8 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(SinglePlayerCreditListActivity.this, error);
-                        AlertUtility.showAlert(SinglePlayerCreditListActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(CreditListActivity.this, error);
+                        AlertUtility.showAlert(CreditListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -205,7 +202,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerCreditListActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(CreditListActivity.this);
         requestQueue.add(stringRequest);
 
     }
@@ -292,7 +289,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
     public void dialogNotificationDetails() {
 
 
-        final AlertDialog.Builder dialogBuilder1 = new AlertDialog.Builder(SinglePlayerCreditListActivity.this);
+        final AlertDialog.Builder dialogBuilder1 = new AlertDialog.Builder(CreditListActivity.this);
 
         LayoutInflater inflater1 = getLayoutInflater();
         final View dialogView1 = inflater1.inflate(R.layout.dialog_notificationlist, null);
@@ -353,12 +350,12 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
                                     notifications.add(puzzleRate);
                                     Log.d("ArraySize", String.valueOf(notifications.size()));
                                 }
-                                notificationAdaptor = new NotificationAdaptor(SinglePlayerCreditListActivity.this, notifications);
+                                notificationAdaptor = new NotificationAdaptor(CreditListActivity.this, notifications);
                                 recycler_view.setAdapter(notificationAdaptor);
                             } else {
 
                                 msg = jobj.getString("message");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SinglePlayerCreditListActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(CreditListActivity.this);
                                 builder.setMessage(msg)
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -380,8 +377,8 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(SinglePlayerCreditListActivity.this, error);
-                        AlertUtility.showAlert(SinglePlayerCreditListActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(CreditListActivity.this, error);
+                        AlertUtility.showAlert(CreditListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -402,7 +399,7 @@ public class SinglePlayerCreditListActivity extends AppCompatActivity implements
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(SinglePlayerCreditListActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(CreditListActivity.this);
         requestQueue.add(stringRequest);
 
     }

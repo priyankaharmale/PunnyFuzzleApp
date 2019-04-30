@@ -1,4 +1,4 @@
-package com.hnweb.punny;
+package com.hnweb.punny.sixtysecondchallge;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -27,15 +27,21 @@ import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.hnweb.punny.adapters.CreditsAdaptor;
+import com.hnweb.punny.InviteFriendActivity;
+import com.hnweb.punny.R;
+import com.hnweb.punny.ScoreboardListActivity;
 import com.hnweb.punny.adapters.NotificationAdaptor;
-import com.hnweb.punny.adapters.PuzzlerateAdaptor;
 import com.hnweb.punny.bo.Notification;
 import com.hnweb.punny.bo.NotificationUpdateModel;
 import com.hnweb.punny.bo.PuzzleRate;
+import com.hnweb.punny.singleplayer.adaptor.SinglePlayerCreditsAdaptor;
+import com.hnweb.punny.sixtysecondchallge.adaptor.SixPuzzlerateAdaptor;
+import com.hnweb.punny.sixtysecondchallge.adaptor.SixtyCreditsAdaptor;
 import com.hnweb.punny.utilities.AlertUtility;
 import com.hnweb.punny.utilities.AppConstant;
 import com.hnweb.punny.utilities.AppUtils;
+import com.hnweb.punny.utilities.MusicManager;
+import com.hnweb.punny.utilities.Utilities;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,18 +50,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+/**
+ * Created by Priyanka Harmale on 30/04/2019.
+ */
 
-public class CreditListActivity extends AppCompatActivity implements NotificationUpdateModel.OnCustomStateListener {
+public class SixtySecondCreditListActivity extends AppCompatActivity implements NotificationUpdateModel.OnCustomStateListener {
     RecyclerView recycler_view;
     ProgressDialog pDialog;
-    CreditsAdaptor puzzleRateAdaptor;
+    SixtyCreditsAdaptor puzzleRateAdaptor;
     ArrayList<PuzzleRate> puzzleRates;
     TextView tv_credit;
     ImageButton btn_back;
     TextView cart_badge;
     String mCartItemCount = "";
-
-    ImageView iv_invite;
+    Boolean isplayed = true;
+    private Boolean continueMusic = true;
+    ImageView iv_invite, iv_sound;
     ArrayList<Notification> notifications;
     TextView textView_empty_list;
     NotificationAdaptor notificationAdaptor;
@@ -79,29 +89,33 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
         recycler_view.setLayoutManager(layoutManager);
         cart_badge = findViewById(R.id.cart_badge);
         iv_invite = findViewById(R.id.iv_invite);
+        iv_sound = findViewById(R.id.switch_sound);
         notificationframe = findViewById(R.id.frame);
         btn_scoreboard = findViewById(R.id.btn_scoreboard);
-
+        btn_scoreboard.setVisibility(View.GONE);
         btn_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
         });
-        getPuzzleRate();
+        // getPuzzleRate();
 
+        iv_invite.setVisibility(View.GONE);
         iv_invite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CreditListActivity.this, InviteFriendActivity.class);
-                startActivity(intent);
+               /* Intent intent = new Intent(SixtySecondCreditListActivity.this, InviteFriendActivity.class);
+                startActivity(intent);*/
             }
         });
+        notificationframe.setVisibility(View.GONE);
+
         notificationframe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                dialogNotificationDetails();
+                // dialogNotificationDetails();
 
 
             }
@@ -110,17 +124,71 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
         btn_scoreboard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(CreditListActivity.this, ScoreboardListActivity.class);
-                startActivity(intent);
+              /*  Intent intent = new Intent(SixtySecondCreditListActivity.this, ScoreboardListActivity.class);
+                startActivity(intent);*/
 
             }
         });
+
+
+        if (AppConstant.IS_MUSIC_ON == true) {
+            if (continueMusic == true) {
+                AppConstant.IS_MUSIC_ON = true;
+                Utilities.setMusicChecked(true);
+                continueMusic = false;
+                MusicManager.start(this, MusicManager.MUSIC_MENU);
+                isplayed = false;
+                iv_sound.setImageResource(R.drawable.volume_up_indicator);
+
+
+            } else {
+                iv_sound.setImageResource(R.drawable.volume_off_indicatornew);
+
+                Utilities.setMusicChecked(false);
+                AppConstant.IS_MUSIC_ON = false;
+                if (!continueMusic) {
+                    MusicManager.pause();
+
+                }
+                continueMusic = true;
+
+                isplayed = false;
+                iv_sound.setImageResource(R.drawable.volume_off_indicatornew);
+            }
+        }
+        iv_sound.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (continueMusic == true) {
+                    AppConstant.IS_MUSIC_ON = true;
+                    Utilities.setMusicChecked(true);
+                    continueMusic = false;
+                    MusicManager.start(SixtySecondCreditListActivity.this, MusicManager.MUSIC_MENU);
+                    isplayed = false;
+                    iv_sound.setImageResource(R.drawable.volume_up_indicator);
+
+
+                } else {
+                    Utilities.setMusicChecked(false);
+                    AppConstant.IS_MUSIC_ON = false;
+                    if (!continueMusic) {
+                        MusicManager.pause();
+
+                    }
+                    continueMusic = true;
+
+                    isplayed = false;
+                    iv_sound.setImageResource(R.drawable.volume_off_indicatornew);
+                }
+            }
+        });
+        getPuzzleRate();
     }
 
 
     private void getPuzzleRate() {
         showProgressDialog();
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_MULTI_CREDIT_PLAN,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, AppConstant.GET_60SEC_CREDIT_PLAN,
                 new Response.Listener<String>() {
 
                     @Override
@@ -155,12 +223,12 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
 
                                 }
                                 tv_credit.setText(String.valueOf(puzzleRates.size()));
-                                puzzleRateAdaptor = new CreditsAdaptor(CreditListActivity.this, puzzleRates);
+                                puzzleRateAdaptor = new SixtyCreditsAdaptor(SixtySecondCreditListActivity.this, puzzleRates);
                                 recycler_view.setAdapter(puzzleRateAdaptor);
                             } else {
 
                                 msg = jobj.getString("message");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(CreditListActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SixtySecondCreditListActivity.this);
                                 builder.setMessage(msg)
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -178,8 +246,8 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(CreditListActivity.this, error);
-                        AlertUtility.showAlert(CreditListActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(SixtySecondCreditListActivity.this, error);
+                        AlertUtility.showAlert(SixtySecondCreditListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -200,7 +268,7 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(CreditListActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(SixtySecondCreditListActivity.this);
         requestQueue.add(stringRequest);
 
     }
@@ -287,7 +355,7 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
     public void dialogNotificationDetails() {
 
 
-        final AlertDialog.Builder dialogBuilder1 = new AlertDialog.Builder(CreditListActivity.this);
+        final AlertDialog.Builder dialogBuilder1 = new AlertDialog.Builder(SixtySecondCreditListActivity.this);
 
         LayoutInflater inflater1 = getLayoutInflater();
         final View dialogView1 = inflater1.inflate(R.layout.dialog_notificationlist, null);
@@ -348,12 +416,12 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
                                     notifications.add(puzzleRate);
                                     Log.d("ArraySize", String.valueOf(notifications.size()));
                                 }
-                                notificationAdaptor = new NotificationAdaptor(CreditListActivity.this, notifications);
+                                notificationAdaptor = new NotificationAdaptor(SixtySecondCreditListActivity.this, notifications);
                                 recycler_view.setAdapter(notificationAdaptor);
                             } else {
 
                                 msg = jobj.getString("message");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(CreditListActivity.this);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(SixtySecondCreditListActivity.this);
                                 builder.setMessage(msg)
                                         .setCancelable(false)
                                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -375,8 +443,8 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        String reason = AppUtils.getVolleyError(CreditListActivity.this, error);
-                        AlertUtility.showAlert(CreditListActivity.this, reason);
+                        String reason = AppUtils.getVolleyError(SixtySecondCreditListActivity.this, error);
+                        AlertUtility.showAlert(SixtySecondCreditListActivity.this, reason);
                         System.out.println("jsonexeption" + error.toString());
                     }
                 }) {
@@ -397,7 +465,7 @@ public class CreditListActivity extends AppCompatActivity implements Notificatio
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         stringRequest.setShouldCache(false);
-        RequestQueue requestQueue = Volley.newRequestQueue(CreditListActivity.this);
+        RequestQueue requestQueue = Volley.newRequestQueue(SixtySecondCreditListActivity.this);
         requestQueue.add(stringRequest);
 
     }

@@ -1,4 +1,4 @@
-package com.hnweb.punny.singleplayer.adaptor;
+package com.hnweb.punny.sixtysecondchallge.adaptor;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,11 +14,15 @@ import android.widget.TextView;
 import com.hnweb.punny.R;
 import com.hnweb.punny.bo.PuzzleRate;
 import com.hnweb.punny.singleplayer.SinglePlayerPuzzleListActivity;
+import com.hnweb.punny.sixtysecondchallge.SixtySecPuzzleListActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Created by Priyanka Harmale on 30/04/2019.
+ */
 
-public class SinglePlayerCreditsAdaptor extends RecyclerView.Adapter<SinglePlayerCreditsAdaptor.ViewHolder> {
+public class SixtyCreditsAdaptor extends RecyclerView.Adapter<SixtyCreditsAdaptor.ViewHolder> {
     private Context context;
     private List<PuzzleRate> PuzzleRatesList;
     private LayoutInflater inflater;
@@ -28,7 +32,7 @@ public class SinglePlayerCreditsAdaptor extends RecyclerView.Adapter<SinglePlaye
     String callFrom;
     String puzzleid, puzzleamout, totalpuzzle;
 
-    public SinglePlayerCreditsAdaptor(Context context, List<PuzzleRate> data) {
+    public SixtyCreditsAdaptor(Context context, List<PuzzleRate> data) {
         this.context = context;
         this.PuzzleRatesList = data;
         this.mFilteredList = new ArrayList<PuzzleRate>();
@@ -37,16 +41,16 @@ public class SinglePlayerCreditsAdaptor extends RecyclerView.Adapter<SinglePlaye
     }
 
     @Override
-    public SinglePlayerCreditsAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SixtyCreditsAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View rowView = inflater.inflate(R.layout.adaptor_multiplayerpuzzle, parent, false);
-        SinglePlayerCreditsAdaptor.ViewHolder vh = new SinglePlayerCreditsAdaptor.ViewHolder(rowView);
+        SixtyCreditsAdaptor.ViewHolder vh = new SixtyCreditsAdaptor.ViewHolder(rowView);
         return vh;
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(final SinglePlayerCreditsAdaptor.ViewHolder holder, final int i) {
+    public void onBindViewHolder(final SixtyCreditsAdaptor.ViewHolder holder, final int i) {
         final PuzzleRate details = PuzzleRatesList.get(i);
 
 
@@ -64,7 +68,7 @@ public class SinglePlayerCreditsAdaptor extends RecyclerView.Adapter<SinglePlaye
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(context, SinglePlayerPuzzleListActivity.class);
+                Intent intent = new Intent(context, SixtySecPuzzleListActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("pid", PuzzleRatesList.get(i).getPid());
                 context.startActivity(intent);

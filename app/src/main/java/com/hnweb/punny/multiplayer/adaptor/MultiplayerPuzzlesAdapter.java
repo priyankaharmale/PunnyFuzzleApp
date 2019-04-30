@@ -1,4 +1,4 @@
-package com.hnweb.punny.adapters;
+package com.hnweb.punny.multiplayer.adaptor;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,11 +21,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.hnweb.punny.MultiPlayerActivity;
+import com.hnweb.punny.multiplayer.activity.MultiPlayerActivity;
 import com.hnweb.punny.R;
 import com.hnweb.punny.bo.Puzzle;
 import com.hnweb.punny.interfaces.OnCallBack;
@@ -34,10 +33,6 @@ import com.hnweb.punny.utilities.App;
 import com.hnweb.punny.utilities.AppConstant;
 import com.hnweb.punny.utilities.AppUtils;
 import com.hnweb.punny.utilities.Utilities;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
