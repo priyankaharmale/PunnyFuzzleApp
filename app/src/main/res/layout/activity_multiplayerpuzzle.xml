@@ -51,7 +51,7 @@
         android:layout_height="?attr/actionBarSize"
         android:layout_below="@+id/toolbar"
         android:gravity="center"
-        android:text="@string/getmorepuzzle_title"
+        android:text="Multiplayer"
         android:textColor="@color/color_instructions"
         android:textSize="18sp"
         android:textStyle="bold" />

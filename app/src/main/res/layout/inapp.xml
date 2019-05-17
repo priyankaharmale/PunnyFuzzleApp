@@ -8,7 +8,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="@drawable/header"
         android:paddingRight="10dp"
@@ -43,7 +43,7 @@
     <TextView
         android:id="@+id/lbl_title"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
         android:gravity="center"
         android:text="@string/getmorepuzzle_title"
@@ -132,7 +132,7 @@
     <RelativeLayout
         android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/footer"
         android:gravity="center_vertical"

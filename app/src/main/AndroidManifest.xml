@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.hnweb.punny">
+    package="com.hnweb.punnyfuzzleiap.punnyfuzzle">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -17,13 +17,13 @@
 
 
     <application
-        android:name=".utilities.App"
+        android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.utilities.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen">
+        <activity android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,85 +31,85 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.LoginActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegisterActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.RegisterActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".TheRulesActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.TheRulesActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".InfoActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.InfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ScoreActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.ScoreActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SinglePalyerScoreActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.SinglePalyerScoreActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".singleplayer.SinglePlayerPuzzlePurchase"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.singleplayer.SinglePlayerPuzzlePurchase"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".singleplayer.SinglePlayerCreditListActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.singleplayer.SinglePlayerCreditListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".singleplayer.SinglePlayerPuzzleListActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.singleplayer.SinglePlayerPuzzleListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ScoreboardListActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.ScoreboardListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SinglePlayerActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.SinglePlayerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".multiplayer.activity.MultiPlayerActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.multiplayer.activity.MultiPlayerActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".InviteFriendActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.InviteFriendActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".inapp"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.inapp"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".inappNew"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.inappNew"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".multiplayer.activity.MultiplayerPuzzlePurchase"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.multiplayer.activity.MultiplayerPuzzlePurchase"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".multiplayer.activity.CreditListActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.multiplayer.activity.CreditListActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".ThrowtowelActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.ThrowtowelActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".multiplayer.activity.MultiplayerScoreActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.multiplayer.activity.MultiplayerScoreActivity"
             android:screenOrientation="portrait"></activity>
 
         <activity
-            android:name=".sixtysecondchallge.SixtySecondPuzzlePurchase"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.sixtysecondchallge.SixtySecondPuzzlePurchase"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".sixtysecondchallge.SixtySecondCreditListActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.sixtysecondchallge.SixtySecondCreditListActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".sixtysecondchallge.SixtySecPuzzleListActivity"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.sixtysecondchallge.SixtySecPuzzleListActivity"
             android:screenOrientation="portrait"></activity>
         <!-- Firebase Service start -->
         <service
-            android:name=".fierbase.MyFirebaseMessagingService"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.fierbase.MyFirebaseMessagingService"
             tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".fierbase.MyFirebaseInstanceIDService"
+            android:name="com.hnweb.punnyfuzzleiap.punnyfuzzle.fierbase.MyFirebaseInstanceIDService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

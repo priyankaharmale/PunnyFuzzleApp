@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:foregroundGravity="top|center">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/header"
+        android:paddingRight="10dp"
+        android:title="@string/some_text_to_display">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/btn_back"
+            android:onClick="btnBack_onClick"
+            android:text="@string/none_to_display"
+            android:visibility="gone" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/header_text" />
+
+        <ImageView
+            android:id="@+id/switch_sound"
+            android:layout_width="@dimen/dimens_40dp"
+            android:layout_height="@dimen/dimens_40dp"
+            android:layout_marginLeft="@dimen/dimens_10dp"
+            android:layout_marginTop="@dimen/dimens_10dp"
+            android:checked="true"
+            android:paddingRight="10dp"
+            android:src="@drawable/volume_off_indicatornew"
+            android:textSize="18sp" />
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <TextView
+        android:id="@+id/lbl_title"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_below="@+id/toolbar"
+        android:gravity="center"
+        android:text="60 Second Challenge"
+        android:textColor="@color/color_instructions"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/horizontal_line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+
+        android:layout_below="@+id/lbl_title"
+        android:background="@color/lightgray" />
+
+    <RelativeLayout
+        android:id="@+id/ll_credit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horizontal_line1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+
+        <Button
+            android:id="@+id/btn_credithead"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimens_20dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/available_credits_button_bg"
+            android:gravity="center"
+            android:text="@string/str_credit"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_credit"
+        android:layout_marginTop="@dimen/dimens_10dp"></android.support.v7.widget.RecyclerView>
+
+    <View
+        android:id="@+id/horizontal_line"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_above="@+id/layout_bottom"
+        android:background="@color/lightgray" />
+
+    <RelativeLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignParentBottom="true"
+        android:background="@color/footer"
+        android:gravity="center_vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_facebook"
+            android:layout_centerHorizontal="true"
+            android:text="@string/copyright"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/darker_gray" />
+
+        <ImageView
+            android:id="@+id/img_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:layout_toLeftOf="@+id/img_twitter"
+            android:src="@drawable/facebook"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_twitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:layout_toLeftOf="@+id/img_googleplus"
+            android:src="@drawable/twitter"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/img_googleplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/home_bottom_margin"
+            android:src="@drawable/googleplus"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
