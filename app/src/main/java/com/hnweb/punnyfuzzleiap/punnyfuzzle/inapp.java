@@ -51,7 +51,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.IabBroadcastReceiver;
+import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.IabBroadcastReceiver.IabBroadcastListener;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.IabHelper;
+import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.IabHelper.IabAsyncInProgressException;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.IabResult;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.Inventory;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.util.Purchase;
@@ -70,35 +72,35 @@ import java.util.Map;
 
 /**
  * Example game using in-app billing version 3.
- *
+ * <p>
  * Before attempting to run this sample, please read the README file. It
  * contains important information on how to set up this project.
- *
+ * <p>
  * All the game-specific logic is implemented here in MainActivity, while the
  * general-purpose boilerplate that can be reused in any app is provided in the
  * classes in the util/ subdirectory. When implementing your own application,
  * you can copy over util/*.java to make use of those utility classes.
- *
+ * <p>
  * This game is a simple "driving" game where the player can buy gas
  * and drive. The car has a tank which stores gas. When the player purchases
  * gas, the tank fills up (1/4 tank at a time). When the player drives, the gas
  * in the tank diminishes (also 1/4 tank at a time).
- *
+ * <p>
  * The user can also purchase a "premium upgrade" that gives them a red car
  * instead of the standard blue one (exciting!).
- *
+ * <p>
  * The user can also purchase a subscription ("infinite gas") that allows them
  * to drive without using up any gas while that subscription is active.
- *
+ * <p>
  * It's important to note the consumption mechanics for each item.
- *
+ * <p>
  * PREMIUM: the item is purchased and NEVER consumed. So, after the original
  * purchase, the player will always own that item. The application knows to
  * display the red car instead of the blue one because it queries whether
  * the premium "item" is owned or not.
- *
+ * <p>
  * INFINITE GAS: this is a subscription, and subscriptions can't be consumed.
- *
+ * <p>
  * GAS: when gas is purchased, the "gas" item is then owned. We consume it
  * when we apply that item's effects to our app's world, which to us means
  * filling up 1/4 of the tank. This happens immediately after purchase!
@@ -106,12 +108,12 @@ import java.util.Map;
  * item is CONSUMED. Consumption should always happen when your game
  * world was safely updated to apply the effect of the purchase. So,
  * in an example scenario:
- *
+ * <p>
  * BEFORE:      tank at 1/2
  * ON PURCHASE: tank at 1/2, "gas" item is owned
  * IMMEDIATELY: "gas" is consumed, tank goes to 3/4
  * AFTER:       tank at 3/4, "gas" item NOT owned any more
- *
+ * <p>
  * Another important point to notice is that it may so happen that
  * the application crashed (or anything else happened) after the user
  * purchased the "gas" item, but before it was consumed. That's why,
@@ -119,10 +121,10 @@ import java.util.Map;
  * we have to apply its effects to our world and consume it. This
  * is also very important!
  */
-public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcastListener,
+public class inapp extends Activity implements IabBroadcastListener,
         DialogInterface.OnClickListener {
     // Debug tag, for logging
-  //  static final String TAG = "TrivialDrive";
+    //  static final String TAG = "TrivialDrive";
 
     // Does the user have the premium upgrade?
     boolean mIsPremium = false;
@@ -146,15 +148,15 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
     static final String SKU_GAS = "100puzzle";
 
     // SKU for our subscription (infinite gas)
-  //  static final String SKU_INFINITE_GAS_MONTHLY = "infinite_gas_monthly";
- //   static final String SKU_INFINITE_GAS_YEARLY = "infinite_gas_yearly";
+    //  static final String SKU_INFINITE_GAS_MONTHLY = "infinite_gas_monthly";
+    //   static final String SKU_INFINITE_GAS_YEARLY = "infinite_gas_yearly";
 
     // (arbitrary) request code for the purchase flow
     static final int RC_REQUEST = 10001;
 
     // Graphics for the gas gauge
-    static int[] TANK_RES_IDS = { R.drawable.gas0, R.drawable.gas1, R.drawable.gas2,
-            R.drawable.gas3, R.drawable.gas4 };
+    static int[] TANK_RES_IDS = {R.drawable.gas0, R.drawable.gas1, R.drawable.gas2,
+            R.drawable.gas3, R.drawable.gas4};
 
     // How many units (1/4 tank is our unit) fill in the tank.
     static final int TANK_MAX = 4;
@@ -172,7 +174,6 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
     ////punnyfuzzle
 
 
-
     private String TAG = inapp.class.getSimpleName();
 
     private Activity activity;
@@ -182,103 +183,18 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
     /*StartPaypal*/
 
     // note that these credentials will differ between live & sandbox environments.
-    private static final String CONFIG_CLIENT_ID = "ARdoaX1Z7r_bU1GERLz0fkWU9xI4hl8H4JaPJNprmOWaQkQ3Uqc9SHKI5rh2rPO6ilXYU8tz9fnupJoN";
 
     private static final int REQUEST_CODE_PAYMENT_40 = 2;
     private static final int REQUEST_CODE_PAYMENT_100 = 3;
-
 
     /*EndPaypal*/
 
     private ProgressDialog pDialog1;
     private ProgressDialog pDialog2;
     private ProgressDialog pDialog3;
+    String puzzle_id, totalpuzzle, plan, credit;
+    String amount, callfrom;
 
-
-    //////////////////
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.inapp);
-
-        // load game data
-        loadData();
-
-        /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
-         * (that you got from the Google Play developer console). This is not your
-         * developer public key, it's the *app-specific* public key.
-         *
-         * Instead of just storing the entire literal string here embedded in the
-         * program,  construct the key at runtime from pieces or
-         * use bit manipulation (for example, XOR with some other string) to hide
-         * the actual key.  The key itself is not secret information, but we don't
-         * want to make it easy for an attacker to replace the public key with one
-         * of their own and then fake messages from the server.
-         */
-        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgNspap5ostykSJ/2oxQSzG/h5Rnw8HBvcyIcJe7pahuFahfrzCIThSe4o94BVCxTpB8PI1s6qYPh5Z79G/l9tQOS61CSdLnd3FQBxryAIW4A2+dfbMtvMuQuxEDjvQHCcc8O7o8RAfaMROxxNxnie4x83WQcXGZoSf10XYTYkuTvDG/umrw/GYumRQSZeRguMhQeGzqzdyZBWgcpV1HYQaKItn5U9t3kYqgEhjUZZRJWtzHN64QXa+4gjq7C7KD5h8oZja/thVRvF8Hc4PeMyXg3DB6pUkunDkekiUD4jn0Xows4IIjj9H5ZFbYeWXKg+AWjygpmOZq03Hmg6tMhZwIDAQAB";
-
-        // Some sanity checks to see if the developer (that's you!) really followed the
-        // instructions to run this sample (don't put these checks on your app!)
-        if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
-            throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
-        }
-        if (getPackageName().startsWith("com.example")) {
-            throw new RuntimeException("Please change the sample's package name! See README.");
-        }
-
-        // Create the helper, passing it our context and the public key to verify signatures with
-        Log.d(TAG, "Creating IAB helper.");
-        mHelper = new IabHelper(this, base64EncodedPublicKey);
-
-        // enable debug logging (for a production application, you should set this to false).
-        mHelper.enableDebugLogging(true);
-
-        // Start setup. This is asynchronous and the specified listener
-        // will be called once setup completes.
-        Log.d(TAG, "Starting setup.");
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-                Log.d(TAG, "Setup finished.");
-
-                if (!result.isSuccess()) {
-                    // Oh noes, there was a problem.
-                    complain("Problem setting up in-app billing: " + result);
-                    return;
-                }
-
-                // Have we been disposed of in the meantime? If so, quit.
-                if (mHelper == null) return;
-
-                // Important: Dynamically register for broadcast messages about updated purchases.
-                // We register the receiver here instead of as a <receiver> in the Manifest
-                // because we always call getPurchases() at startup, so therefore we can ignore
-                // any broadcasts sent while the app isn't running.
-                // Note: registering this listener in an Activity is a bad idea, but is done here
-                // because this is a SAMPLE. Regardless, the receiver must be registered after
-                // IabHelper is setup, but before first call to getPurchases().
-                mBroadcastReceiver = new IabBroadcastReceiver(inapp.this);
-                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
-                registerReceiver(mBroadcastReceiver, broadcastFilter);
-
-                // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                Log.d(TAG, "Setup successful. Querying inventory.");
-                try {
-                    mHelper.queryInventoryAsync(mGotInventoryListener);
-                } catch (IabHelper.IabAsyncInProgressException e) {
-                    complain("Error querying inventory. Another async operation in progress.");
-                }
-            }
-        });
-        consumeProducts();
-    }
-
-    private void consumeProducts() {
-
-
-
-
-    }
 
     // Listener that's called when we finish querying the items and subscriptions we own
     IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
@@ -338,12 +254,12 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                     mHelper.consumeAsync(inventory.getPurchase(SKU_GAS), new IabHelper.OnConsumeFinishedListener() {
                         @Override
                         public void onConsumeFinished(Purchase purchase, IabResult result) {
-                            Log.d("InApp Purchase","onConsumeFinished= "+result.getMessage());
+                            Log.d("InApp Purchase", "onConsumeFinished= " + result.getMessage());
                         }
                     });
-                } catch (IabHelper.IabAsyncInProgressException e) {
+                } catch (IabAsyncInProgressException e) {
                     complain("Error consuming gas. Another async operation in progress.");
-                    Log.d("InApp Purchase","IabAsyncInProgressException");
+                    Log.d("InApp Purchase", "IabAsyncInProgressException");
                 }
                 return;
             }
@@ -353,20 +269,152 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                     mHelper.consumeAsync(inventory.getPurchase(SKU_PREMIUM), new IabHelper.OnConsumeFinishedListener() {
                         @Override
                         public void onConsumeFinished(Purchase purchase, IabResult result) {
-                            Log.d("InApp Purchase","onConsumeFinished= "+result.getMessage());
+                            Log.d("InApp Purchase", "onConsumeFinished= " + result.getMessage());
                         }
                     });
-                } catch (IabHelper.IabAsyncInProgressException e) {
+                } catch (IabAsyncInProgressException e) {
                     complain("Error consuming gas. Another async operation in progress.");
-                    Log.d("InApp Purchase","IabAsyncInProgressException");
+                    Log.d("InApp Purchase", "IabAsyncInProgressException");
                 }
                 return;
             }
-         //   updateUi();
-         //   setWaitScreen(false);
+            //   updateUi();
+            //   setWaitScreen(false);
             Log.d(TAG, "Initial inventory query finished; enabling main UI.");
         }
     };
+
+    //////////////////
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.inapp);
+        Intent intent = getIntent();
+        amount = intent.getStringExtra("amount");
+        puzzle_id = intent.getStringExtra("id");
+        totalpuzzle = intent.getStringExtra("totalpuzzle");
+        plan = intent.getStringExtra("plan");
+        credit = intent.getStringExtra("credit");
+        callfrom = intent.getStringExtra("callfrom");
+        // load game data
+        loadData();
+
+        /* base64EncodedPublicKey should be YOUR APPLICATION'S PUBLIC KEY
+         * (that you got from the Google Play developer console). This is not your
+         * developer public key, it's the *app-specific* public key.
+         *
+         * Instead of just storing the entire literal string here embedded in the
+         * program,  construct the key at runtime from pieces or
+         * use bit manipulation (for example, XOR with some other string) to hide
+         * the actual key.  The key itself is not secret information, but we don't
+         * want to make it easy for an attacker to replace the public key with one
+         * of their own and then fake messages from the server.
+         */
+        // String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgNspap5ostykSJ/2oxQSzG/h5Rnw8HBvcyIcJe7pahuFahfrzCIThSe4o94BVCxTpB8PI1s6qYPh5Z79G/l9tQOS61CSdLnd3FQBxryAIW4A2+dfbMtvMuQuxEDjvQHCcc8O7o8RAfaMROxxNxnie4x83WQcXGZoSf10XYTYkuTvDG/umrw/GYumRQSZeRguMhQeGzqzdyZBWgcpV1HYQaKItn5U9t3kYqgEhjUZZRJWtzHN64QXa+4gjq7C7KD5h8oZja/thVRvF8Hc4PeMyXg3DB6pUkunDkekiUD4jn0Xows4IIjj9H5ZFbYeWXKg+AWjygpmOZq03Hmg6tMhZwIDAQAB";
+
+
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgNspap5ostykSJ/2oxQSzG/h5Rnw8HBvcyIcJe7pahuFahfrzCIThSe4o94BVCxTpB8PI1s6qYPh5Z79G/l9tQOS61CSdLnd3FQBxryAIW4A2+dfbMtvMuQuxEDjvQHCcc8O7o8RAfaMROxxNxnie4x83WQcXGZoSf10XYTYkuTvDG/umrw/GYumRQSZeRguMhQeGzqzdyZBWgcpV1HYQaKItn5U9t3kYqgEhjUZZRJWtzHN64QXa+4gjq7C7KD5h8oZja/thVRvF8Hc4PeMyXg3DB6pUkunDkekiUD4jn0Xows4IIjj9H5ZFbYeWXKg+AWjygpmOZq03Hmg6tMhZwIDAQAB";
+
+        // Some sanity checks to see if the developer (that's you!) really followed the
+        // instructions to run this sample (don't put these checks on your app!)
+        if (base64EncodedPublicKey.contains("CONSTRUCT_YOUR")) {
+            throw new RuntimeException("Please put your app's public key in MainActivity.java. See README.");
+        }
+        if (getPackageName().startsWith("com.example")) {
+            throw new RuntimeException("Please change the sample's package name! See README.");
+        }
+
+        // Create the helper, passing it our context and the public key to verify signatures with
+        Log.d(TAG, "Creating IAB helper.");
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+
+        // enable debug logging (for a production application, you should set this to false).
+        mHelper.enableDebugLogging(true);
+
+        // Start setup. This is asynchronous and the specified listener
+        // will be called once setup completes.
+        Log.d(TAG, "Starting setup.");
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                Log.d(TAG, "Setup finished.");
+
+                if (!result.isSuccess()) {
+                    // Oh noes, there was a problem.
+                    complain("Problem setting up in-app billing: " + result);
+                    return;
+                } else {
+                    if (plan.equalsIgnoreCase("1")) {
+                        Log.d(TAG, "Upgrade button clicked; launching purchase flow for upgrade.");
+                        //  setWaitScreen(true);
+
+
+                        try {
+                            String payload = "";
+                            mHelper.launchPurchaseFlow(inapp.this, SKU_PREMIUM, RC_REQUEST,
+                                    mPurchaseFinishedListener, payload);
+                        } catch (IabAsyncInProgressException e) {
+                            complain("Service Not Available , Please Try Again Later..");
+                            //setWaitScreen(false);
+                        }
+
+
+                        /* TODO: for security, generate your payload here for verification. See the comments on
+                         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
+                         *        an empty string, but on a production app you should carefully generate this. */
+
+
+                    } else if (plan.equalsIgnoreCase("2")) {
+                        String payload = "bGoa+V7g/yqDXvKRqq+JTFn4uQZbPiQJo4pf9RzJ";
+
+                        try {
+                            // mHelper.launchPurchaseFlow(this, SKU_GAS, RC_REQUEST,
+                            //          mPurchaseFinishedListener, payload);
+
+                            mHelper.launchPurchaseFlow(inapp.this, SKU_GAS, RC_REQUEST,
+                                    mPurchaseFinishedListener, payload);
+
+                        } catch (IabAsyncInProgressException e) {
+                            complain("Service Not Available , Please Try Again Later..");
+                            //  setWaitScreen(false);
+                        }
+                    }
+
+
+                }
+
+                // Have we been disposed of in the meantime? If so, quit.
+                if (mHelper == null) return;
+
+                // Important: Dynamically register for broadcast messages about updated purchases.
+                // We register the receiver here instead of as a <receiver> in the Manifest
+                // because we always call getPurchases() at startup, so therefore we can ignore
+                // any broadcasts sent while the app isn't running.
+                // Note: registering this listener in an Activity is a bad idea, but is done here
+                // because this is a SAMPLE. Regardless, the receiver must be registered after
+                // IabHelper is setup, but before first call to getPurchases().
+                mBroadcastReceiver = new IabBroadcastReceiver(inapp.this);
+                IntentFilter broadcastFilter = new IntentFilter(IabBroadcastReceiver.ACTION);
+                registerReceiver(mBroadcastReceiver, broadcastFilter);
+
+                // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                Log.d(TAG, "Setup successful. Querying inventory.");
+                try {
+                    mHelper.queryInventoryAsync(mGotInventoryListener);
+                } catch (IabAsyncInProgressException e) {
+                    complain("Error querying inventory. Another async operation in progress.");
+                }
+            }
+        });
+        consumeProducts();
+
+    }
+
+    private void consumeProducts() {
+
+
+    }
+
 
     @Override
     public void receivedBroadcast() {
@@ -374,7 +422,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         Log.d(TAG, "Received broadcast notification. Querying inventory.");
         try {
             mHelper.queryInventoryAsync(mGotInventoryListener);
-        } catch (IabHelper.IabAsyncInProgressException e) {
+        } catch (IabAsyncInProgressException e) {
             complain("Error querying inventory. Another async operation in progress.");
         }
     }
@@ -391,7 +439,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
     public void btnFree_onClick(View view) {
         try {
             AppConstant.REFRESH = true;
-           // inapp.this.onBackPressed();
+            // inapp.this.onBackPressed();
             finish();
 
             if (mBroadcastReceiver != null) {
@@ -410,7 +458,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
     }
 
     // User clicked the "Buy Gas" button
-    public void onBuyGasButtonClicked(View arg0) {
+   /* public void onBuyGasButtonClicked(View arg0) {
         Log.d(TAG, "Buy gas button clicked.");
 
         try {
@@ -437,7 +485,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                     mHelper.launchPurchaseFlow(this, SKU_GAS, RC_REQUEST,
                                     mPurchaseFinishedListener, payload);
 
-                } catch (IabHelper.IabAsyncInProgressException e) {
+                } catch (IabAsyncInProgressException e) {
                     complain("Service Not Available , Please Try Again Later..");
                     //  setWaitScreen(false);
                 }
@@ -447,7 +495,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
             Log.e(AppConstant.TAG, "Error(btn40_onClick):" + ex.toString());
         }
 
-       /* if (mSubscribedToInfiniteGas) {
+       *//* if (mSubscribedToInfiniteGas) {
             complain("No need! You're subscribed to infinite gas. Isn't that awesome?");
             return;
         }
@@ -455,16 +503,16 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         if (mTank >= TANK_MAX) {
             complain("Your tank is full. Drive around a bit!");
             return;
-        }*/
+        }*//*
 
         // launch the gas purchase UI flow.
         // We will be notified of completion via mPurchaseFinishedListener
        // setWaitScreen(true);
         Log.d(TAG, "Launching purchase flow for gas.");
 
-        /* TODO: for security, generate your payload here for verification. See the comments on
-         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
-         *        an empty string, but on a production app you should carefully generate this. */
+        *//* TODO: for security, generate your payload here for verification. See the comments on
+     *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
+     *        an empty string, but on a production app you should carefully generate this. *//*
 
     }
 
@@ -493,7 +541,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                     String payload = "";
                     mHelper.launchPurchaseFlow(this, SKU_PREMIUM, RC_REQUEST,
                             mPurchaseFinishedListener, payload);
-                } catch (IabHelper.IabAsyncInProgressException e) {
+                } catch (IabAsyncInProgressException e) {
                     complain("Service Not Available , Please Try Again Later..");
                     //setWaitScreen(false);
                 }
@@ -501,11 +549,11 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         } catch (Exception ex) {
             Log.e(AppConstant.TAG, "Error(btn100_onClick):" + ex.toString());
         }
-        /* TODO: for security, generate your payload here for verification. See the comments on
-         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
-         *        an empty string, but on a production app you should carefully generate this. */
+        *//* TODO: for security, generate your payload here for verification. See the comments on
+     *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
+     *        an empty string, but on a production app you should carefully generate this. *//*
 
-    }
+    }*/
 /*
     // "Subscribe to infinite gas" button clicked. Explain to user, then start purchase
     // flow for subscription.
@@ -583,14 +631,14 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                 oldSkus.add(mInfiniteGasSku);
             }
 
-          //  setWaitScreen(true);
+            //  setWaitScreen(true);
             Log.d(TAG, "Launching purchase flow for gas subscription.");
             try {
                 mHelper.launchPurchaseFlow(this, mSelectedSubscriptionPeriod, IabHelper.ITEM_TYPE_SUBS,
                         oldSkus, RC_REQUEST, mPurchaseFinishedListener, payload);
-            } catch (IabHelper.IabAsyncInProgressException e) {
+            } catch (IabAsyncInProgressException e) {
                 complain("Service Not Available , Please Try Again Later..");
-            //    setWaitScreen(false);
+                //    setWaitScreen(false);
             }
             // Reset the dialog options
             mSelectedSubscriptionPeriod = "";
@@ -612,54 +660,52 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                     int responseCode = data.getIntExtra("RESPONSE_CODE", 0);
                     String purchaseData = data.getStringExtra("INAPP_PURCHASE_DATA");
                     String dataSignature = data.getStringExtra("INAPP_DATA_SIGNATURE");
-                    Log.d("InAPPPrchase","dataSignature= "+dataSignature);
-                    Log.d("InAPPPrchase","purchaseData"+purchaseData);
-                    Log.d("InAPPPrchase", "responseCode"+ String.valueOf(responseCode));
+                    Log.d("InAPPPrchase", "dataSignature= " + dataSignature);
+                    Log.d("InAPPPrchase", "purchaseData" + purchaseData);
+                    Log.d("InAPPPrchase", "responseCode" + String.valueOf(responseCode));
 
                     JSONObject jo = new JSONObject(purchaseData);
+                    final String Order_id = jo.getString("orderId");
                     String sku = jo.getString("productId");
-              //      Toast.makeText(getApplicationContext(),"sku"+sku,Toast.LENGTH_LONG).show();
-                    System.out.println("op"+sku);
+                    //      Toast.makeText(getApplicationContext(),"sku"+sku,Toast.LENGTH_LONG).show();
+                    System.out.println("op" + sku);
 
-                    if(sku.equals("40puzzle"))
-                    {
-                     //   Toast.makeText(getApplicationContext(),"40 Puzzles called",Toast.LENGTH_LONG).show();
+                    if (sku.equals("40puzzle")) {
+                        //   Toast.makeText(getApplicationContext(),"40 Puzzles called",Toast.LENGTH_LONG).show();
                         Utilities.setPurchasedInfo(AppConstant.LOGIN_ID + "|" +
                                 AppConstant.LOGIN_NAME + "|" +
                                 "Success|" +
                                 "0.99|" +
                                 "date" + "|" +
                                 "40");
-                        Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", "PayPal Payment Successfully Done.", "Ok",
+                        Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", " Payment Successfully Done.", "Ok",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
-                                        postPaymentData("Success", "0.99", "40", "date");
+                                        postPaymentData(Order_id);
                                     }
                                 }, false);
 
-                    }
-                    else
-                    {
-                    //    Toast.makeText(getApplicationContext(),"100 Puzzles called",Toast.LENGTH_LONG).show();
+                    } else {
+                        //    Toast.makeText(getApplicationContext(),"100 Puzzles called",Toast.LENGTH_LONG).show();
                         Utilities.setPurchasedInfo(AppConstant.LOGIN_ID + "|" +
                                 AppConstant.LOGIN_NAME + "|" +
                                 "Success|" +
                                 "1.99|" +
                                 "date" + "|" +
                                 "100");
-                        Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", "PayPal Payment Successfully Done.", "Ok",
+                        Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", " Payment Successfully Done.", "Ok",
                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface arg0, int arg1) {
-                                        postPaymentData("Success", "1.99", "100", "date");
+                                        postPaymentData(Order_id);
                                     }
                                 }, false);
 
                     }
-                  //  alert("You have bought the " + sku + ". Excellent choice, adventurer!");
-                  //  Toast.makeText(getApplicationContext(),"40 puzzles done",Toast.LENGTH_LONG).show();
-                ///    Toast.makeText(getApplicationContext(),"data"+AppConstant.LOGIN_NAME+AppConstant.LOGIN_ID,Toast.LENGTH_LONG).show();
+                    //  alert("You have bought the " + sku + ". Excellent choice, adventurer!");
+                    //  Toast.makeText(getApplicationContext(),"40 puzzles done",Toast.LENGTH_LONG).show();
+                    ///    Toast.makeText(getApplicationContext(),"data"+AppConstant.LOGIN_NAME+AppConstant.LOGIN_ID,Toast.LENGTH_LONG).show();
 
                   /*  Utilities.setPurchasedInfo(AppConstant.LOGIN_ID + "|" +
                             AppConstant.LOGIN_NAME + "|" +
@@ -676,8 +722,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                             }, false);
 */
 
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     alert("Failed to parse purchase data.");
                     e.printStackTrace();
                 }
@@ -703,7 +748,9 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         }
     }*/
 
-    /** Verifies the developer payload of a purchase. */
+    /**
+     * Verifies the developer payload of a purchase.
+     */
     boolean verifyDeveloperPayload(Purchase p) {
         String payload = p.getDeveloperPayload();
 
@@ -743,12 +790,12 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
 
             if (result.isFailure()) {
                 complain("Error purchasing: " + result);
-             //   setWaitScreen(false);
+                //   setWaitScreen(false);
                 return;
             }
             if (!verifyDeveloperPayload(purchase)) {
                 complain("Error purchasing. Authenticity verification failed.");
-              //  setWaitScreen(false);
+                //  setWaitScreen(false);
                 return;
             }
 
@@ -759,16 +806,16 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                 ///punny fuzzle
 //.makeText(getApplicationContext(),"40 puzzles done",Toast.LENGTH_LONG).show();
                 Utilities.setPurchasedInfo("m17" + "|" +
-                        "name"+ "|" +
+                        "name" + "|" +
                         "Success|" +
                         "1.99|" +
                         "date" + "|" +
                         "100");
-                Utilities.showAlertDailog(activity, "PunnyFuzzles", "PayPal Payment Successfully Done.", "Ok",
+                Utilities.showAlertDailog(activity, "PunnyFuzzles", "Payment Successfully Done.", "Ok",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
-                                postPaymentData("Success", "1.99", "100", "date");
+                                //   postPaymentData();
                             }
                         }, false);
 
@@ -782,30 +829,29 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                  //   setWaitScreen(false);
                     return;
                 }*/
-            }
-            else if (purchase.getSku().equals(SKU_PREMIUM)) {
+            } else if (purchase.getSku().equals(SKU_PREMIUM)) {
                 // bought the premium upgrade!
             /*    Log.d(TAG, "Purchase is premium upgrade. Congratulating user.");
                 alert("Thank you for upgrading to premium!");
                 mIsPremium = true;*/
 
 
-                    AppConstant.TOTAL_PUZZLES_AVAILABLE = AppConstant.TOTAL_PUZZLES_AVAILABLE - 100;
-                    Utilities.setPurchasedInfo(AppConstant.LOGIN_ID + "|" +
-                            AppConstant.LOGIN_NAME + "|" +
-                            "Success|" +
-                            "1.99|" +
-                            "datetime" + "|" +
-                            "100");
-                    Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", "PayPal Payment Successfully Done.", "Ok",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface arg0, int arg1) {
-                                    postPaymentData("Success", "1.99", "100", "demodatetime");
-                                }
-                            }, false);
-              //  updateUi();
-              //  setWaitScreen(false);
+                AppConstant.TOTAL_PUZZLES_AVAILABLE = AppConstant.TOTAL_PUZZLES_AVAILABLE - 100;
+                Utilities.setPurchasedInfo(AppConstant.LOGIN_ID + "|" +
+                        AppConstant.LOGIN_NAME + "|" +
+                        "Success|" +
+                        "1.99|" +
+                        "datetime" + "|" +
+                        "100");
+                Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", " Payment Successfully Done.", "Ok",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                // postPaymentData();
+                            }
+                        }, false);
+                //  updateUi();
+                //  setWaitScreen(false);
             }
            /* else if (purchase.getSku().equals(SKU_INFINITE_GAS_MONTHLY)
                     || purchase.getSku().equals(SKU_INFINITE_GAS_YEARLY)) {
@@ -841,44 +887,29 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                 saveData();
                 alert("You filled 1/4 tank. Your tank is now " + String.valueOf(mTank) + "/4 full!");*/
                 AppConstant.TOTAL_PUZZLES_AVAILABLE = AppConstant.TOTAL_PUZZLES_AVAILABLE - 100;
-             //   Toast.makeText(getApplicationContext(),"data"+AppConstant.LOGIN_NAME+AppConstant.LOGIN_ID,Toast.LENGTH_LONG).show();
+                //   Toast.makeText(getApplicationContext(),"data"+AppConstant.LOGIN_NAME+AppConstant.LOGIN_ID,Toast.LENGTH_LONG).show();
                 Utilities.setPurchasedInfo(AppConstant.LOGIN_ID + "|" +
                         AppConstant.LOGIN_NAME + "|" +
                         "Success|" +
                         "1.99|" +
                         "datetime" + "|" +
                         "100");
-                Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", "PayPal Payment Successfully Done.", "Ok",
+                Utilities.showAlertDailog(inapp.this, "PunnyFuzzles", " Payment Successfully Done.", "Ok",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface arg0, int arg1) {
-                                postPaymentData("Success", "1.99", "100", "demodatetime");
+                                // postPaymentData();
                             }
                         }, false);
-            }
-            else {
+            } else {
                 complain("Error while consuming: " + result);
             }
-           // updateUi();
-           // setWaitScreen(false);
+            // updateUi();
+            // setWaitScreen(false);
             Log.d(TAG, "End consumption flow.");
         }
     };
-/*
-    // Drive button clicked. Burn gas!
-    public void onDriveButtonClicked(View arg0) {
-        Log.d(TAG, "Drive button clicked.");
-        if (!mSubscribedToInfiniteGas && mTank <= 0) alert("Oh, no! You are out of gas! Try buying some!");
-        else {
-            if (!mSubscribedToInfiniteGas) --mTank;
-            saveData();
-            alert("Vroooom, you drove a few miles.");
-           // updateUi();
-            Log.d(TAG, "Vrooom. Tank is now " + mTank);
-        }
-    }*/
 
-    // We're being destroyed. It's important to dispose of the helper here!
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -887,9 +918,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         if (mBroadcastReceiver != null) {
             try {
                 unregisterReceiver(mBroadcastReceiver);
-            }
-            catch(Exception e)
-            {
+            } catch (Exception e) {
 
             }
         }
@@ -902,46 +931,22 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         }
     }
 
-    // updates UI to reflect model
-/*    public void updateUi() {
-        // update the car color to reflect premium status or lack thereof
-        ((ImageView)findViewById(R.id.free_or_premium)).setImageResource(mIsPremium ? R.drawable.premium : R.drawable.free);
 
-        // "Upgrade" button is only visible if the user is not premium
-        findViewById(R.id.upgrade_button).setVisibility(mIsPremium ? View.GONE : View.VISIBLE);
-
-        ImageView infiniteGasButton = (ImageView) findViewById(R.id.infinite_gas_button);
-        if (mSubscribedToInfiniteGas) {
-            // If subscription is active, show "Manage Infinite Gas"
-            infiniteGasButton.setImageResource(R.drawable.manage_infinite_gas);
-        } else {
-            // The user does not have infinite gas, show "Get Infinite Gas"
-            infiniteGasButton.setImageResource(R.drawable.get_infinite_gas);
-        }
-
-        // update gas gauge to reflect tank status
-        if (mSubscribedToInfiniteGas) {
-            ((ImageView)findViewById(R.id.gas_gauge)).setImageResource(R.drawable.gas_inf);
-        }
-        else {
-            int index = mTank >= TANK_RES_IDS.length ? TANK_RES_IDS.length - 1 : mTank;
-            ((ImageView)findViewById(R.id.gas_gauge)).setImageResource(TANK_RES_IDS[index]);
-        }
-    }*/
-
-    // Enables or disables the "please wait" screen.
-   /* void setWaitScreen(boolean set) {
-        findViewById(R.id.screen_main).setVisibility(set ? View.GONE : View.VISIBLE);
-        findViewById(R.id.screen_wait).setVisibility(set ? View.VISIBLE : View.GONE);
-    }*/
-///////////////////punny fuzzle payment ////////////////////////////
-    private void postPaymentData(final String strStatus, final String strOrderPrice, final String strPuzzlePurchased,
-                                 final String currentDateTimeString) {
-      //  Toast.makeText(getApplicationContext(),"inside post payment data".toString(),Toast.LENGTH_LONG).show();
+    ///////////////////punny fuzzle payment ////////////////////////////
+    private void postPaymentData(final String Order_id) {
+        //  Toast.makeText(getApplicationContext(),"inside post payment data".toString(),Toast.LENGTH_LONG).show();
 
         //  showProgressDialog1();
-        String url;
-        url = AppConstant.POST_PAYMENT_DATA;
+        String url = "";
+        if (callfrom.equalsIgnoreCase("1")) {
+            url = AppConstant.SINGLE_PURCHASE_PLAN;
+        } else if (callfrom.equalsIgnoreCase("2")) {
+            url = AppConstant.MULTI_PURCHASE_PLAN;
+        } else if (callfrom.equalsIgnoreCase("3")) {
+            url = AppConstant.PURCHASE_PLAN_60SEC;
+
+        }
+
 
         AppConstant.REFRESH = true;
 
@@ -954,7 +959,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                         try {
                             JSONObject response = new JSONObject(response1);
                             JSONObject objresponse = response.getJSONObject("response");
-                      //      Toast.makeText(getApplicationContext(),"response"+objresponse.toString(),Toast.LENGTH_LONG).show();
+                            //      Toast.makeText(getApplicationContext(),"response"+objresponse.toString(),Toast.LENGTH_LONG).show();
                             if (objresponse.getInt("flag") == 1) {
                                 Utilities.setPurchasedInfo("");
 ///my code
@@ -974,7 +979,7 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
                             Utilities.setNOsend(true);
                             e.printStackTrace();
                         }
-                 //       hideProgressDialog1();
+                        //       hideProgressDialog1();
                     }
 
 
@@ -983,20 +988,22 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.d(TAG, "Error: " + error.getMessage());
-            //    hideProgressDialog1();
+                //    hideProgressDialog1();
             }
-        })
-        {
+        }) {
 
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+
+
+                params.put("tid", puzzle_id);
+                params.put("pay_amt", amount);
+                params.put("total_puzzel", totalpuzzle);
+                params.put("trans_id", Order_id);
                 params.put("user_id", AppConstant.LOGIN_ID);
-                params.put("firstname", AppConstant.LOGIN_NAME);
-                params.put("payment_status", strStatus);
-                params.put("total_order_price", strOrderPrice);
-                params.put("date_order_placed", currentDateTimeString);
-                params.put("total_puzzle_purchase", strPuzzlePurchased);
+                params.put("credit", credit);
+                params.put("payment_status", "Success");
 
                 return params;
             }
@@ -1038,28 +1045,6 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
             e.printStackTrace();
         }
         super.onStop();
-    }
-
-   /* @Override
-    protected void onDestroy() {
-        try {
-            App.getInstance().cancelPendingRequests(TAG);
-            stopService(new Intent(this, PayPalService.class));
-            hideProgressDialog3();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onDestroy();
-    }*/
-
-
-    private void showProgressDialog1() {
-        pDialog1.show();
-    }
-
-    private void hideProgressDialog1() {
-        if (pDialog1.isShowing())
-            pDialog1.hide();
     }
 
 
@@ -1142,24 +1127,25 @@ public class inapp extends Activity implements IabBroadcastReceiver.IabBroadcast
         Log.d(TAG, "Showing alert dialog: " + message);
         bld.create().show();
     }
-   /* @Override
-    public void onClick(DialogInterface dialog, int which) {
-        // TODO Auto-generated method stub
-        switch(which){
-            case DialogInterface.BUTTON_POSITIVE: // yes
 
-                break;
-            case DialogInterface.BUTTON_NEGATIVE: // no
+    /* @Override
+     public void onClick(DialogInterface dialog, int which) {
+         // TODO Auto-generated method stub
+         switch(which){
+             case DialogInterface.BUTTON_POSITIVE: // yes
 
-                break;
-            case DialogInterface.BUTTON_NEUTRAL: // neutral
+                 break;
+             case DialogInterface.BUTTON_NEGATIVE: // no
 
-                break;
-            default:
-                // nothing
-                break;
-        }
-    }*/
+                 break;
+             case DialogInterface.BUTTON_NEUTRAL: // neutral
+
+                 break;
+             default:
+                 // nothing
+                 break;
+         }
+     }*/
     void saveData() {
 
         /*

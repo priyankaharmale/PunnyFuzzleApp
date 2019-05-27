@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.R;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.bo.PuzzleRate;
+import com.hnweb.punnyfuzzleiap.punnyfuzzle.inapp;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.utilities.AppConstant;
 
 
@@ -80,13 +82,22 @@ public class PuzzlerateAdaptor extends RecyclerView.Adapter<PuzzlerateAdaptor.Vi
             @Override
             public void onClick(View view) {
 
-              /*  Intent intent = new Intent(context, inappNew.class);
+
+                Intent intent = new Intent(context, inapp.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("id", details.getTid());
-                intent.putExtra("amount", details.getAmount());
-                intent.putExtra("totalpuzzle", details.getPuzzle());
-                context.startActivity(intent);*/
-                addPaymentInfo("10", PuzzleRatesList.get(i).getTid(), PuzzleRatesList.get(i).getAmount(), PuzzleRatesList.get(i).getPuzzle(), PuzzleRatesList.get(i).getCredit());
+                intent.putExtra("id", PuzzleRatesList.get(i).getTid());
+                intent.putExtra("amount", PuzzleRatesList.get(i).getAmount());
+                intent.putExtra("totalpuzzle", PuzzleRatesList.get(i).getPuzzle());
+                intent.putExtra("credit", PuzzleRatesList.get(i).getCredit());
+                intent.putExtra("callfrom", "2");
+                if (PuzzleRatesList.get(i).getCredit().equalsIgnoreCase("2")) {
+                    intent.putExtra("plan", "1");
+                } else {
+                    intent.putExtra("plan", "2");
+                }
+
+                context.startActivity(intent);
+               // addPaymentInfo("10", PuzzleRatesList.get(i).getTid(), PuzzleRatesList.get(i).getAmount(), PuzzleRatesList.get(i).getPuzzle(), PuzzleRatesList.get(i).getCredit());
             }
         });
     }

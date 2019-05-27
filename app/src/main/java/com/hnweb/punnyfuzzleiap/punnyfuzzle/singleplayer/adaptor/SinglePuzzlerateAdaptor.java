@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.R;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.bo.PuzzleRate;
+import com.hnweb.punnyfuzzleiap.punnyfuzzle.inapp;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.inappNew;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.singleplayer.SinglePlayerPuzzleListActivity;
 import com.hnweb.punnyfuzzleiap.punnyfuzzle.utilities.App;
@@ -101,14 +102,16 @@ public class SinglePuzzlerateAdaptor extends RecyclerView.Adapter<SinglePuzzlera
                     }else
                     {
                       //  addPaymentInfo("10", PuzzleRatesList.get(i).getTid(), PuzzleRatesList.get(i).getAmount(), PuzzleRatesList.get(i).getPuzzle(), PuzzleRatesList.get(i).getCredit());
-                        Intent intent = new Intent(context, inappNew.class);
+                        Intent intent = new Intent(context, inapp.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtra("id", PuzzleRatesList.get(i).getTid());
                         intent.putExtra("amount", PuzzleRatesList.get(i).getAmount());
                         intent.putExtra("totalpuzzle", PuzzleRatesList.get(i).getPuzzle());
                         intent.putExtra("credit", PuzzleRatesList.get(i).getCredit());
                         intent.putExtra("plan", "1");
+                        intent.putExtra("callfrom", "1");
                         context.startActivity(intent);
+
                     }
                 }
 
